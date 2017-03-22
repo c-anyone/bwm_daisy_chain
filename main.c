@@ -9,7 +9,7 @@
 
 
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
-
+#include "serial.h"
 /**
 
  * @brief main() - Application entry point
@@ -33,7 +33,7 @@ int main(void)
 
     while(1U)
     {
-
+    	daisy_rx_polling();
     }
   }
 
@@ -42,4 +42,8 @@ int main(void)
   {
 
   }
+}
+
+void daisy_received_buffer(uint8_t buf[], uint8_t control, uint8_t id) {
+	// do something
 }
