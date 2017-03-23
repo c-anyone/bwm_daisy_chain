@@ -9,7 +9,7 @@
 
 
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
-#include "serial.h"
+#include "daisy_wrapper.h"
 /**
 
  * @brief main() - Application entry point
@@ -26,6 +26,8 @@ int main(void)
 
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
 
+  XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
+
   if(status != DAVE_STATUS_SUCCESS)
   {
     /* Placeholder for error handler code. The while loop below can be replaced with an user error handler. */
@@ -33,14 +35,14 @@ int main(void)
 
     while(1U)
     {
-    	daisy_rx_polling();
+
     }
   }
 
   /* Placeholder for user application code. The while loop below can be replaced with user application code. */
   while(1U)
   {
-
+  	daisy_rx_polling();
   }
 }
 

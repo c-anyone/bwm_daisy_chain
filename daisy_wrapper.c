@@ -6,7 +6,7 @@
  */
 
 #include <DAVE.h>
-#include "serial.h"
+#include "daisy_wrapper.h"
 
 void min_frame_received(uint8_t buf[], uint8_t control, uint8_t id) {
 	daisy_received_buffer(buf, control, id);
@@ -17,8 +17,8 @@ void daisy_transmit_buffer(uint8_t id, uint8_t buf[], uint8_t control) {
 }
 
 void daisy_rx_polling() {
-	if(!UART_IsRXFIFOEmpty(&UART)) {
-		   uint8_t byte = XMC_UART_CH_GetReceivedData(UART.channel);
+	if(!UART_IsRXFIFOEmpty(&DAISY)) {
+		   uint8_t byte = XMC_UART_CH_GetReceivedData(DAISY.channel);
 		   min_rx_byte(byte);
 	}
 }
@@ -28,6 +28,6 @@ uint8_t min_tx_space(void) {
 }
 
 void min_tx_byte(uint8_t byte) {
-	UART_Transmit(&UART,&byte,1);
+	UART_Transmit(&DAISY,&byte,1);
 }
 
