@@ -38,6 +38,8 @@ int main(void)
 
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
 
+  ballaufnahme_init();
+
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
   XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
