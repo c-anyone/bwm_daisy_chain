@@ -17,14 +17,17 @@ static daisy_command_t command = {.command = CMD_UNDEFINDED,
 
 void min_frame_received(uint8_t buf[], uint8_t control, uint8_t id) {
 	memcpy(&command,buf,control);
-
-	switch (command.command) {
-	case CMD_READY:
-		daisy_ready_received(command.sender_id);
-		break;
-	case CMD_START:
-		daisy_start_received();
-		break;
+	if(id == MY_ID){
+		switch (command.command) {
+		case CMD_READY:
+			daisy_ready_received(command.sender_id);
+			break;
+		case CMD_START:
+			daisy_start_received();
+			break;
+		}
+	} else {
+		min_tx_frame(id,buf,control);
 	}
 }
 
