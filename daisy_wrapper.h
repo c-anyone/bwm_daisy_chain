@@ -11,6 +11,31 @@
 #ifndef DAISY_WRAPPER_H_
 #define DAISY_WRAPPER_H_
 
+#define ID_MASTER  (0x01u)
+#define ID_SLAVE_1 (0x02u)
+#define ID_SLAVE_2 (0x03u)
+#define ID_SLAVE_3 (0x04u)
+
+// id definition for this device
+// might be moved to daisy_wrapper.h
+#define MY_ID ID_MASTER
+
+// commands to communicate with daisy devices
+// might be moved to daisy_wrapper.h
+#define CMD_UNDEFINDED (0x00u)
+#define CMD_START	   (0x01u)
+#define CMD_READY	   (0x02u)
+
+// type for communication, payload is a placeholder, might be needed
+// for setting motors to specific speeds etc.
+typedef struct {
+	uint8_t command;
+	uint8_t sender_id;
+	uint16_t payload;
+} daisy_command_t;
+
+
+
 uint8_t daisy_rx_buf[0xff];
 
 // in case still undefined data has to be sent

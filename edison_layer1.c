@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  */
 
-#include "min.h"
+#include "edison_min.h"
 
 /* Maximum size of a MIN frame:
  *
@@ -192,12 +192,12 @@ static uint8_t tx_header_byte_countdown;
  */
 static void stuffed_tx_byte(uint8_t byte)
 {
-	min_tx_byte(byte);
+	edison_min_tx_byte(byte);
 	fletcher16_tx_step(byte);
 	
 	if(byte == HEADER_BYTE) {
 		if(--tx_header_byte_countdown == 0) {
-			min_tx_byte(STUFF_BYTE);		/* Stuff byte */
+			edison_min_tx_byte(STUFF_BYTE);		/* Stuff byte */
 			tx_header_byte_countdown = 2U;
 		}
 	}
@@ -238,9 +238,9 @@ void edison_min_tx_frame(uint8_t id, uint8_t payload[], uint8_t control)
 	fletcher16_tx_init();
 
 	/* Header is 3 bytes; because unstuffed will reset receiver immediately */
-	min_tx_byte(HEADER_BYTE);
-	min_tx_byte(HEADER_BYTE);
-	min_tx_byte(HEADER_BYTE);
+	edison_min_tx_byte(HEADER_BYTE);
+	edison_min_tx_byte(HEADER_BYTE);
+	edison_min_tx_byte(HEADER_BYTE);
 
 	stuffed_tx_byte(id);
 
@@ -257,5 +257,5 @@ void edison_min_tx_frame(uint8_t id, uint8_t payload[], uint8_t control)
 	stuffed_tx_byte(checksum &0x00ff);
 
 	/* Ensure end-of-frame doesn't contain 0xaa and confuse search for start-of-frame */
-	min_tx_byte(EOF_BYTE);
+	edison_min_tx_byte(EOF_BYTE);
 }

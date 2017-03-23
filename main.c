@@ -11,7 +11,6 @@
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
 #include "daisy_wrapper.h"
 #include "edison_wrapper.h"
-#include "global_definition.h"
 
 // Master  ID = 0x01
 // Slave 1 ID = 0x02
