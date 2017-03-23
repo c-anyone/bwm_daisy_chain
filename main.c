@@ -10,6 +10,14 @@
 
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
 #include "daisy_wrapper.h"
+#include "global_definition.h"
+#define MY_ID	(0x01)
+
+	// Master  ID = 0x01
+	// Slave 1 ID = 0x02
+	// Slave 2 ID = 0x03
+	// Slave 3 ID = 0x04
+
 /**
 
  * @brief main() - Application entry point
@@ -19,6 +27,9 @@
  * invoking the APP initialization dispatcher routine - DAVE_Init() and hosting the place-holder for user application
  * code.
  */
+daisy_command_t com;
+
+static void daisy_command_handling();
 
 int main(void)
 {
@@ -47,5 +58,17 @@ int main(void)
 }
 
 void daisy_received_buffer(uint8_t buf[], uint8_t control, uint8_t id) {
-	// do something
+	if(id == MY_ID) {
+//		do the what we need to
+		memcpy(&com,buf,control);
+		daisy_command_handling();
+	} else {
+//		retransmit
+		daisy_transmit_buffer(id,buf,control);
+	}
 }
+
+static void daisy_command_handling() {
+	// do something with com
+}
+
