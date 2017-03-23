@@ -2,7 +2,7 @@
  * serial.h
  *
  *  Created on: Mar 22, 2017
- *      Author: faebsn
+ *      Author: Fabio Pungg
  */
 
 #include <DAVE.h>

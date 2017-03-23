@@ -10,6 +10,7 @@
 
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
 #include "daisy_wrapper.h"
+#include "edison_wrapper.h"
 #include "global_definition.h"
 
 // Master  ID = 0x01
@@ -26,7 +27,11 @@
  * invoking the APP initialization dispatcher routine - DAVE_Init() and hosting the place-holder for user application
  * code.
  */
-daisy_command_t com;
+daisy_command_t com = {
+.command = CMD_UNDEFINDED,
+.payload = 0xAFFE,
+.sender_id = ID_MASTER
+};
 
 int main(void)
 {
@@ -35,6 +40,7 @@ int main(void)
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
 
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
+  XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
   if(status != DAVE_STATUS_SUCCESS)
   {
@@ -50,6 +56,7 @@ int main(void)
   /* Placeholder for user application code. The while loop below can be replaced with user application code. */
   while(1U)
   {
+	edison_rx_polling();
   	daisy_rx_polling();
   }
 }
@@ -60,5 +67,9 @@ void daisy_ready_received(uint8_t sender_id){
 void daisy_start_received(){
 	// start the necessary transitions and signal to master with
 	// daisy_send_ready();
+}
+
+void test_communication(void) {
+	daisy_transmit_buffer(ID_MASTER,(uint8_t*)&com,sizeof(com));
 }
 

@@ -33,7 +33,7 @@ void daisy_transmit_buffer(uint8_t id, uint8_t buf[], uint8_t control) {
 	min_tx_frame(id,daisy_tx_buf,control);
 }
 
-// should be called in a
+// should be called in a loop
 void daisy_rx_polling() {
 	if(!UART_IsRXFIFOEmpty(&DAISY)) {
 		uint8_t byte = XMC_UART_CH_GetReceivedData(DAISY.channel);
