@@ -24,12 +24,12 @@ void min_tx_frame(uint8_t id, uint8_t payload[], uint8_t control);
 void min_rx_byte(uint8_t byte);
 
 /* Callback; ask Layer 2 to queue a byte into its UART handler */
-void min_tx_byte(uint8_t byte);										
+extern void min_tx_byte(uint8_t byte);
 
 /* Callback; indicate to Layer 2 that a valid frame has been received */
-void min_frame_received(uint8_t buf[], uint8_t control, uint8_t id);		
+extern void min_frame_received(uint8_t buf[], uint8_t control, uint8_t id);
 
 /* Callback; returns to MIN the space in the transmit FIFO */
-uint8_t min_tx_space(void);
+extern uint8_t min_tx_space(void);
 
 #endif /* MIN_H_ */
