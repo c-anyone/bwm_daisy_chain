@@ -8,8 +8,8 @@
 #include <DAVE.h>
 #include "ballaufnahme.h"
 
-volatile uint32_t endschalter_oben = 800;
-volatile uint32_t endschalter_unten = 100;
+volatile uint32_t endschalter_oben = 3500;
+volatile uint32_t endschalter_unten = 2960;
 
 volatile XMC_VADC_RESULT_SIZE_t result;
 volatile XMC_VADC_RESULT_SIZE_t filter =0;

@@ -11,6 +11,7 @@
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
 #include "daisy_wrapper.h"
 #include "edison_wrapper.h"
+#include "ballaufnahme.h"
 
 // Master  ID = 0x01
 // Slave 1 ID = 0x02
@@ -59,6 +60,7 @@ int main(void)
   {
 	edison_rx_polling();
   	daisy_rx_polling();
+  	ballaufnahme_worker();
   }
 }
 
