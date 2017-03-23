@@ -11,12 +11,11 @@
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
 #include "daisy_wrapper.h"
 #include "global_definition.h"
-#define MY_ID	(0x01)
 
-	// Master  ID = 0x01
-	// Slave 1 ID = 0x02
-	// Slave 2 ID = 0x03
-	// Slave 3 ID = 0x04
+// Master  ID = 0x01
+// Slave 1 ID = 0x02
+// Slave 2 ID = 0x03
+// Slave 3 ID = 0x04
 
 /**
 
@@ -28,8 +27,6 @@
  * code.
  */
 daisy_command_t com;
-
-static void daisy_command_handling();
 
 int main(void)
 {
@@ -57,18 +54,11 @@ int main(void)
   }
 }
 
-void daisy_received_buffer(uint8_t buf[], uint8_t control, uint8_t id) {
-	if(id == MY_ID) {
-//		do the what we need to
-		memcpy(&com,buf,control);
-		daisy_command_handling();
-	} else {
-//		retransmit
-		daisy_transmit_buffer(id,buf,control);
-	}
+void daisy_ready_received(uint8_t sender_id){
+	// handle the message from a slave in a state machine, master only!
 }
-
-static void daisy_command_handling() {
-	// do something with com
+void daisy_start_received(){
+	// start the necessary transitions and signal to master with
+	// daisy_send_ready();
 }
 
