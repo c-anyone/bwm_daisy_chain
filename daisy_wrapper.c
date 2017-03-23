@@ -7,7 +7,6 @@
 
 #include <DAVE.h>
 #include "daisy_wrapper.h"
-#include "global_definition.h"
 
 static uint8_t daisy_tx_buf[0xff];
 static daisy_command_t command = {.command = CMD_UNDEFINDED,
