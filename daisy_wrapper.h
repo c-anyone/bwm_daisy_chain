@@ -2,7 +2,7 @@
  * serial.h
  *
  *  Created on: Mar 22, 2017
- *      Author: faebsn
+ *      Author: Fabio Pungg
  */
 
 #include <DAVE.h>
@@ -16,7 +16,6 @@
 #define ID_SLAVE_1 (0x02u)
 #define ID_SLAVE_2 (0x03u)
 #define ID_SLAVE_3 (0x04u)
-
 #define MACHINE_COUNT (0x04u)
 
 // id definition for this device

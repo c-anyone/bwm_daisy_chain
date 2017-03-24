@@ -10,7 +10,9 @@
 
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
 #include "daisy_wrapper.h"
+#include "edison_wrapper.h"
 #include "StateMachine/machine_state.h"
+#include "ballaufnahme.h"
 
 // Master  ID = 0x01
 // Slave 1 ID = 0x02
@@ -26,7 +28,11 @@
  * invoking the APP initialization dispatcher routine - DAVE_Init() and hosting the place-holder for user application
  * code.
  */
-daisy_command_t com;
+daisy_command_t com = {
+.command = CMD_UNDEFINDED,
+.payload = 0xAFFE,
+.sender_id = ID_MASTER
+};
 machine_state_t current_machine_state = INIT;
 
 int main(void)
@@ -35,7 +41,10 @@ int main(void)
 
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
 
+  ballaufnahme_init();
+
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
+  XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
   if(status != DAVE_STATUS_SUCCESS)
   {
@@ -51,7 +60,9 @@ int main(void)
   /* Placeholder for user application code. The while loop below can be replaced with user application code. */
   while(1U)
   {
+	edison_rx_polling();
   	daisy_rx_polling();
+	ballaufnahme_worker();
   	current_machine_state = state_machine(current_machine_state);
   }
 }
@@ -68,6 +79,21 @@ void daisy_start_received(){
 }
 
 void daisy_undefined_command(daisy_command_t cmd) {
+	// evaluate the undefined command here and act accordingly
+}
 
+void test_communication(void) {
+	daisy_transmit_buffer(ID_MASTER,(uint8_t*)&com,sizeof(com));
+}
+
+void test_ball_intake(uint8_t command) {
+	switch(command) {
+	case 0x11:
+		ballaufnahme_move_pos();
+		break;
+	case 0x12:
+		ballaufnahme_move_neg();
+		break;
+	}
 }
 
