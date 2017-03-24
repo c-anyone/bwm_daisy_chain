@@ -51,6 +51,11 @@ uint8_t min_tx_space(void) {
 	return 0xff;
 }
 
+void daisy_send_busy(void) {
+	command.command = CMD_BUSY;
+	min_tx_frame(ID_MASTER,(uint8_t*)&command,sizeof(command));
+}
+
 void daisy_send_ready() {
 	command.command = CMD_READY;
 	min_tx_frame(ID_MASTER,(uint8_t*)&command,sizeof(command));

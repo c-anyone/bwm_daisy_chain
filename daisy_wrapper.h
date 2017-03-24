@@ -6,6 +6,7 @@
  */
 
 #include <DAVE.h>
+#include <stdbool.h>
 #include "min.h"
 
 #ifndef DAISY_WRAPPER_H_
@@ -16,6 +17,8 @@
 #define ID_SLAVE_2 (0x03u)
 #define ID_SLAVE_3 (0x04u)
 
+#define MACHINE_COUNT (0x04u)
+
 // id definition for this device
 // might be moved to daisy_wrapper.h
 #define MY_ID ID_MASTER
@@ -25,6 +28,7 @@
 #define CMD_UNDEFINDED (0x00u)
 #define CMD_START	   (0x01u)
 #define CMD_READY	   (0x02u)
+#define CMD_BUSY	   (0x03u)
 
 // type for communication, payload is a placeholder, might be needed
 // for setting motors to specific speeds etc.
@@ -51,12 +55,16 @@ void daisy_received_cmd(uint8_t cmd);
 
 // send ready always addressed to master, as the master keeps global state
 void daisy_send_ready(void);
+// always addressed to master
+void daisy_send_busy(void);
+
 // send start should only be used from master, as it keeps global state
 void daisy_send_start(uint8_t id);
 
 // to be implemented in main or state machine handler
 extern void daisy_ready_received(uint8_t id);
 extern void daisy_start_received(void);
+extern void daisy_busy_received(uint8_t id);
 extern void daisy_undefined_command(daisy_command_t);
 
 #endif /* DAISY_WRAPPER_H_ */
