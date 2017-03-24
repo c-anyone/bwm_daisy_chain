@@ -22,23 +22,24 @@ typedef enum {
 } machine_state_t;
 
 typedef void(*StateEntryFun)();
-typedef void(*StateFun)();
+typedef void(*StateEntryFun)();
 typedef bool(*TransitionFun)();
 
-
 typedef struct {
-	machine_state_t current_state;
+	machine_state_t cur_state;
 	machine_state_t next_state;
-	StateFun stateFun;
+	StateEntryFun entryFun;
 	TransitionFun transFun;
 }state_t;
 
-
-
+/**
+ * only function to be called from external context
+ */
 machine_state_t state_machine(machine_state_t);
 
 /**
- * State Functions
+ * State Functions, might be moved to .c file
+ * and made static
  */
 void init();
 void waiting();
@@ -48,7 +49,8 @@ void shot_ready();
 void shot_fired();
 
 /**
- * Transition Functions
+ * Transition Functions, might be moved to .c file
+ * and made static
  */
 bool init_to_waiting();
 bool waiting_to_intake_pos();
@@ -56,17 +58,5 @@ bool intake_pos_to_ready();
 bool intake_ready_to_shot_ready();
 bool shot_ready_to_fired();
 bool shot_fired_to_waiting();
-
-state_t states[NUM_STATES] = {
-		{INIT, WAITING, &init, &init_to_waiting},
-		{WAITING, INTAKE_POS, &waiting, &waiting_to_intake_pos},
-		{INTAKE_POS, INTAKE_READY, &intake_pos, &intake_pos_to_ready},
-		{INTAKE_READY, SHOT_READY, &intake_ready, &intake_ready_to_shot_ready},
-		{SHOT_READY, SHOT_FIRED, &shot_ready, &shot_ready_to_fired},
-		{SHOT_FIRED, SHOT_READY, &shot_fired, &shot_fired_to_waiting}
-
-};
-
-machine_state_t current_state = INIT;
 
 #endif /* MACHINE_STATE_H_ */

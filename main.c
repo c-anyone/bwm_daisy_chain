@@ -10,6 +10,7 @@
 
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
 #include "daisy_wrapper.h"
+#include "StateMachine/machine_state.h"
 
 // Master  ID = 0x01
 // Slave 1 ID = 0x02
@@ -26,6 +27,7 @@
  * code.
  */
 daisy_command_t com;
+machine_state_t current_machine_state = INIT;
 
 int main(void)
 {
@@ -50,7 +52,11 @@ int main(void)
   while(1U)
   {
   	daisy_rx_polling();
+  	current_machine_state = state_machine(current_machine_state);
   }
+}
+void daisy_busy_received(uint8_t sender_id) {
+	// memorize the working status somewhere
 }
 
 void daisy_ready_received(uint8_t sender_id){

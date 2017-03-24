@@ -6,6 +6,7 @@
  */
 
 #include <DAVE.h>
+#include <stdbool.h>
 #include "min.h"
 
 #ifndef DAISY_WRAPPER_H_
@@ -15,6 +16,8 @@
 #define ID_SLAVE_1 (0x02u)
 #define ID_SLAVE_2 (0x03u)
 #define ID_SLAVE_3 (0x04u)
+
+#define MACHINE_COUNT (0x04u)
 
 // id definition for this device
 // might be moved to daisy_wrapper.h
@@ -57,6 +60,7 @@ void daisy_send_start(uint8_t id);
 // to be implemented in main or state machine handler
 extern void daisy_ready_received(uint8_t id);
 extern void daisy_start_received(void);
+extern void daisy_busy_received(uint8_t id);
 extern void daisy_undefined_command(daisy_command_t);
 
 #endif /* DAISY_WRAPPER_H_ */
