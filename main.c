@@ -61,3 +61,7 @@ void daisy_start_received(){
 	// daisy_send_ready();
 }
 
+void daisy_undefined_command(daisy_command_t cmd) {
+
+}
+
