@@ -72,7 +72,22 @@ void daisy_start_received(){
 	// daisy_send_ready();
 }
 
+void daisy_undefined_command(daisy_command_t cmd) {
+	// evaluate the undefined command here and act accordingly
+}
+
 void test_communication(void) {
 	daisy_transmit_buffer(ID_MASTER,(uint8_t*)&com,sizeof(com));
+}
+
+void test_ball_intake(uint8_t command) {
+	switch(command) {
+	case 0x11:
+		ballaufnahme_move_pos();
+		break;
+	case 0x12:
+		ballaufnahme_move_neg();
+		break;
+	}
 }
 

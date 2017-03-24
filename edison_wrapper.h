@@ -19,5 +19,7 @@ void set_coordinate(uint8_t x_low, uint8_t x_high, uint8_t y_low, uint8_t y_high
 void edison_rx_polling();
 
 extern void test_communication(void);
+extern void test_ball_intake(uint8_t);
+
 
 #endif /* EDISON_WRAPPER_H_ */

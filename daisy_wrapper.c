@@ -24,6 +24,9 @@ void min_frame_received(uint8_t buf[], uint8_t control, uint8_t id) {
 		case CMD_START:
 			daisy_start_received();
 			break;
+		case CMD_UNDEFINDED:
+			daisy_undefined_command(command);
+			break;
 		}
 	} else {
 		min_tx_frame(id,buf,control);

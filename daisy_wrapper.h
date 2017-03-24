@@ -57,5 +57,6 @@ void daisy_send_start(uint8_t id);
 // to be implemented in main or state machine handler
 extern void daisy_ready_received(uint8_t id);
 extern void daisy_start_received(void);
+extern void daisy_undefined_command(daisy_command_t);
 
 #endif /* DAISY_WRAPPER_H_ */

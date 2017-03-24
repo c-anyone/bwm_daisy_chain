@@ -183,7 +183,6 @@
   <provided xsi:type="ResourceModel:BitField" name="PC15_2_0" URI="http://resources/0.1.40/port/p/2/iocr12/pc15_2_0" value="0" toolTipHelpDescription="Port Control for Port n Pin 12 to 15" defaultValue="0" startPos="27" stopPos="29" accessPermission="rw" maxValue="7" minValue="0"/>
   <provided xsi:type="ResourceModel:BitField" name="PC15_4" URI="http://resources/0.1.40/port/p/2/iocr12/pc15_4" value="0" toolTipHelpDescription="Port Control for Port n Pin 12 to 15" defaultValue="0" startPos="31" stopPos="31" accessPermission="rw" maxValue="1" minValue="0"/>
   <provided xsi:type="ResourceModel:ResourceGroup" name="P2.2 / #50" URI="http://resources/0.1.40/port/p/2/pad/2">
-    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/PWM_CCU4/v4_1_20/PWM_CCU4_0.app#//@hwResources.1"/>
     <resourcesList name="out_p" requiredResourceUri="http://resources/0.1.40/port/p/2/out/p2"/>
     <resourcesList name="omr_ps" requiredResourceUri="http://resources/0.1.40/port/p/2/omr/ps2"/>
     <resourcesList name="omr_pr" requiredResourceUri="http://resources/0.1.40/port/p/2/omr/pr2"/>

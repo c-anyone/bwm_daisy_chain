@@ -24,13 +24,13 @@
     <downwardMapList xsi:type="ResourceModel:App" href="../../GLOBAL_CCU4/v4_1_12/GLOBAL_CCU4_0.app#/"/>
   </requiredApps>
   <hwResources name="CC4 Config" URI="http://resources/4.1.20/app/PWM_CCU4/0/hwres_ccu4_cc4_slice" resourceGroupUri="peripheral/ccu4/*/cc4/*" mResGrpUri="peripheral/ccu4/*/cc4/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/CCU41/CCU41_1.dd#//@provided.3"/>
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/CCU40/CCU40_0.dd#//@provided.3"/>
   </hwResources>
   <hwResources name="PWM_CCU4 Channel Out" URI="http://resources/4.1.20/app/PWM_CCU4/0/hwres_port_channel_out" resourceGroupUri="port/p/*/pad/*" mResGrpUri="port/p/*/pad/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/Port2/Port2_2.dd#//@provided.10"/>
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/Port0/Port0_0.dd#//@provided.23"/>
   </hwResources>
-  <hwResources name="PWM_CCU4 Channel Out" URI="http://resources/4.1.20/app/PWM_CCU4/0/__pin_hwres_port_channel_out" resourceGroupUri="devicepackage/0/*" mResGrpUri="devicepackage/0/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/DEVICEPACKAGE/DEVICEPACKAGE_0.dd#//@provided.15"/>
+  <hwResources name="PWM_CCU4 Channel Out" URI="http://resources/4.1.20/app/PWM_CCU4/0/__pin_hwres_port_channel_out" resourceGroupUri="devicepackage/0/94" constraintType="GLOBAL_RESOURCE" mResGrpUri="devicepackage/0/*">
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/DEVICEPACKAGE/DEVICEPACKAGE_0.dd#//@provided.16"/>
   </hwResources>
   <connections URI="http://resources/4.1.20/app/PWM_CCU4/0/http://resources/4.1.20/app/PWM_CCU4/0/vs_ccu4_cc4_global/http://resources/4.1.20/app/PWM_CCU4/0/vs_ccu4_cc4_global_signal" systemDefined="true" sourceSignal="ccu4_global" targetSignal="CCU4_global_signal" targetVirtualSignal="//@virtualSignals.0" proxySrcVirtualSignalUri="http://resources/4.1.12/app/GLOBAL_CCU4/0/vs_global_ccu4_globalsignal" containingProxySignal="true">
     <downwardMapList xsi:type="ResourceModel:VirtualSignal" href="../../GLOBAL_CCU4/v4_1_12/GLOBAL_CCU4_0.app#//@virtualSignals.0"/>

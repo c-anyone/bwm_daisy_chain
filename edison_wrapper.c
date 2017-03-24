@@ -20,8 +20,9 @@ void delay(uint32_t time);
 //}
 
 void set_shoot(void) {
-	test_communication();
 }
+
+
 
 void set_coordinate(uint8_t x_low, uint8_t x_high, uint8_t y_low, uint8_t y_high, uint8_t hang){
 //	uint16_t x_coordinate = (x_low | x_high << 8);
@@ -49,15 +50,17 @@ void edison_min_tx_byte(uint8_t byte){
 
 void edison_min_frame_received(uint8_t buf[], uint8_t control, uint8_t id){
 	edison_min_tx_frame(id, buf, control);
+	test_ball_intake(id);
 	if (id == 0x11){
-		set_shoot();
+//		set_shoot();
 	}
 	else if (id == 0x12){
-		uint8_t x_low = buf[0];
-		uint8_t x_high = buf[1];
-		uint8_t y_low = buf[2];
-		uint8_t y_high = buf[3];
-		uint8_t hang = buf[4];
-		set_coordinate(x_low, x_high, y_low, y_high, hang);
+
+//		uint8_t x_low = buf[0];
+//		uint8_t x_high = buf[1];
+//		uint8_t y_low = buf[2];
+//		uint8_t y_high = buf[3];
+//		uint8_t hang = buf[4];
+//		set_coordinate(x_low, x_high, y_low, y_high, hang);
 	}
 }
