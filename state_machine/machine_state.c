@@ -2,11 +2,17 @@
  * machine_state.c
  *
  *  Created on: Mar 24, 2017
- *      Author: fapungg
+ *      Author: Fabio Pungg
  */
 
 #include "machine_state.h"
 
+
+/**
+ * init might have to be split up into multiple steps because
+ * ball intake has to be lowered and sled has to be in waiting position
+ * BEFORE magazine starts rotating
+ */
 const state_t machine_state[NUM_STATES] = {
 		{INIT, WAITING, &init, &init_to_waiting},
 		{WAITING, INTAKE_POS, &waiting, &waiting_to_intake_pos},
@@ -14,9 +20,13 @@ const state_t machine_state[NUM_STATES] = {
 		{INTAKE_READY, SHOT_READY, &intake_ready, &intake_ready_to_shot_ready},
 		{SHOT_READY, SHOT_FIRED, &shot_ready, &shot_ready_to_fired},
 		{SHOT_FIRED, SHOT_READY, &shot_fired, &shot_fired_to_waiting}
-
 };
 
+/**
+ *	on function entry executes state entry function once
+ *	afterwards it waits for transition function to return true
+ *	before transitioning to the next state
+ */
 machine_state_t state_machine(machine_state_t machine_current_state) {
 	static bool entered = false;
 	if(entered == false) {

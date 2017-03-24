@@ -1,8 +1,8 @@
 /*
- * serial.c
+ * daisy_wrapper.c
  *
  *  Created on: Mar 22, 2017
- *      Author: faebsn
+ *      Author: Fabio Pungg
  */
 
 #include <DAVE.h>
@@ -27,6 +27,9 @@ void min_frame_received(uint8_t buf[], uint8_t control, uint8_t id) {
 		case CMD_UNDEFINDED:
 			daisy_undefined_command(command);
 			break;
+		case CMD_BUSY:
+			daisy_busy_received(command.sender_id);
+			break;
 		}
 	} else {
 		min_tx_frame(id,buf,control);
@@ -38,7 +41,7 @@ void daisy_transmit_buffer(uint8_t id, uint8_t buf[], uint8_t control) {
 	min_tx_frame(id,daisy_tx_buf,control);
 }
 
-// should be called in a loop
+// should be called in main loop
 void daisy_rx_polling() {
 	if(!UART_IsRXFIFOEmpty(&DAISY)) {
 		uint8_t byte = XMC_UART_CH_GetReceivedData(DAISY.channel);

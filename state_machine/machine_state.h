@@ -2,7 +2,7 @@
  * machine_state.h
  *
  *  Created on: Mar 24, 2017
- *      Author: fapungg
+ *      Author: Fabio Pungg
  */
 
 #ifndef MACHINE_STATE_H_

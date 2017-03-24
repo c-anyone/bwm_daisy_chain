@@ -2,17 +2,17 @@
  * main.c
  *
  *  Created on: 2017 Mar 22 14:22:12
- *  Author: faebsn
+ *  Author: Fabio Pungg
  */
 
-
-
-
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
-#include "daisy_wrapper.h"
-#include "edison_wrapper.h"
-#include "StateMachine/machine_state.h"
-#include "ballaufnahme.h"
+
+#include <stdbool.h>
+
+#include "daisy_chain/daisy_wrapper.h"
+#include "edison/edison_wrapper.h"
+#include "state_machine/machine_state.h"
+#include "master_control/ball_intake.h"
 
 // Master  ID = 0x01
 // Slave 1 ID = 0x02
@@ -33,7 +33,12 @@ daisy_command_t com = {
 .payload = 0xAFFE,
 .sender_id = ID_MASTER
 };
+
 machine_state_t current_machine_state = INIT;
+bool motorboard_ready_status[MACHINE_COUNT] = {
+		false,false,false,false
+};
+
 
 int main(void)
 {
@@ -41,7 +46,7 @@ int main(void)
 
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
 
-  ballaufnahme_init();
+  ball_intake_init();
 
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
   XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
@@ -54,6 +59,8 @@ int main(void)
     while(1U)
     {
 
+
+
     }
   }
 
@@ -62,12 +69,12 @@ int main(void)
   {
 	edison_rx_polling();
   	daisy_rx_polling();
-	ballaufnahme_worker();
+	ball_intake_worker();
   	current_machine_state = state_machine(current_machine_state);
   }
 }
 void daisy_busy_received(uint8_t sender_id) {
-	// memorize the working status somewhere
+	// memorize the working status somewhere, master only!
 }
 
 void daisy_ready_received(uint8_t sender_id){
@@ -89,10 +96,10 @@ void test_communication(void) {
 void test_ball_intake(uint8_t command) {
 	switch(command) {
 	case 0x11:
-		ballaufnahme_move_pos();
+		ball_intake_lower();
 		break;
 	case 0x12:
-		ballaufnahme_move_neg();
+		ball_intake_raise();
 		break;
 	}
 }

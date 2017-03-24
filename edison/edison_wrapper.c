@@ -2,7 +2,7 @@
  * wlan_handler.c
  *
  *  Created on: Mar 23, 2017
- *      Author: faebsn
+ *      Author: Fabio Pungg
  */
 
 #include <DAVE.h>

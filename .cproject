@@ -68,7 +68,7 @@
 							<tool id="com.ifx.xmc4000.appRelease.linker.170877895" name="ARM-GCC C Linker" superClass="com.ifx.xmc4000.appRelease.linker">
 								<option id="com.ifx.xmc4000.appLinker.option.misc.fpu.865216546" name="Fpu (-mfpu)" superClass="com.ifx.xmc4000.appLinker.option.misc.fpu" value="org.eclipse.cdt.cross.arm.gnu.base.option.mfpu.fpv4-sp-d16" valueType="enumerated"/>
 								<option id="com.ifx.xmc4000.appLinker.option.misc.mfloat.2097802653" name="Floating point" superClass="com.ifx.xmc4000.appLinker.option.misc.mfloat" value="org.eclipse.cdt.cross.arm.gnu.base.option.other.mfloat.softfp" valueType="enumerated"/>
-								<option id="com.ifx.xmc4000.appLinker.option.nosys.specs.1859264212" superClass="com.ifx.xmc4000.appLinker.option.nosys.specs" value="true" valueType="boolean"/>
+								<option id="com.ifx.xmc4000.appLinker.option.nosys.specs.1859264212" name="Provide default newlib system calls (-specs=nosys.specs)" superClass="com.ifx.xmc4000.appLinker.option.nosys.specs" value="true" valueType="boolean"/>
 								<inputType id="com.ifx.xmc4000.appLinker.inputType.736075333" name="ARM-GCC for XMC Linker Input Type" superClass="com.ifx.xmc4000.appLinker.inputType">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -77,7 +77,7 @@
 							<tool id="com.ifx.xmc4000.appRelease.cpplinker.1682815346" name="ARM-GCC C++ Linker" superClass="com.ifx.xmc4000.appRelease.cpplinker">
 								<option id="com.ifx.xmc4000.appCppLinker.option.misc.fpu.1807371033" name="Fpu (-mfpu)" superClass="com.ifx.xmc4000.appCppLinker.option.misc.fpu" value="org.eclipse.cdt.cross.arm.gnu.base.option.mfpu.fpv4-sp-d16" valueType="enumerated"/>
 								<option id="com.ifx.xmc4000.appCppLinker.option.misc.mfloat.1526502988" name="Floating point" superClass="com.ifx.xmc4000.appCppLinker.option.misc.mfloat" value="org.eclipse.cdt.cross.arm.gnu.base.option.other.mfloat.softfp" valueType="enumerated"/>
-								<option id="com.ifx.xmc4000.appCppLinker.option.nosys.specs.1542630714" superClass="com.ifx.xmc4000.appCppLinker.option.nosys.specs" value="true" valueType="boolean"/>
+								<option id="com.ifx.xmc4000.appCppLinker.option.nosys.specs.1542630714" name="Provide default newlib system calls (-specs=nosys.specs)" superClass="com.ifx.xmc4000.appCppLinker.option.nosys.specs" value="true" valueType="boolean"/>
 							</tool>
 							<tool id="com.ifx.xmc4000.libLinker.756370100" name="ARM-GCC Archiver" superClass="com.ifx.xmc4000.libLinker"/>
 							<tool id="com.ifx.xmc4000.appRelease.createflash.609215332" name="ARM-GCC Create Flash Image" superClass="com.ifx.xmc4000.appRelease.createflash"/>
@@ -86,7 +86,11 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Dave/Model" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="master_control|state_machine|daisy_chain|edison|Dave/Model" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="daisy_chain"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="edison"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="master_control"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="state_machine"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -159,7 +163,7 @@
 							<tool id="com.ifx.xmc4000.appDebug.linker.1802573267" name="ARM-GCC C Linker" superClass="com.ifx.xmc4000.appDebug.linker">
 								<option id="com.ifx.xmc4000.appLinker.option.misc.fpu.1065407771" name="Fpu (-mfpu)" superClass="com.ifx.xmc4000.appLinker.option.misc.fpu" value="org.eclipse.cdt.cross.arm.gnu.base.option.mfpu.fpv4-sp-d16" valueType="enumerated"/>
 								<option id="com.ifx.xmc4000.appLinker.option.misc.mfloat.1217844210" name="Floating point" superClass="com.ifx.xmc4000.appLinker.option.misc.mfloat" value="org.eclipse.cdt.cross.arm.gnu.base.option.other.mfloat.softfp" valueType="enumerated"/>
-								<option id="com.ifx.xmc4000.appLinker.option.nosys.specs.268602710" superClass="com.ifx.xmc4000.appLinker.option.nosys.specs" value="true" valueType="boolean"/>
+								<option id="com.ifx.xmc4000.appLinker.option.nosys.specs.268602710" name="Provide default newlib system calls (-specs=nosys.specs)" superClass="com.ifx.xmc4000.appLinker.option.nosys.specs" value="true" valueType="boolean"/>
 								<inputType id="com.ifx.xmc4000.appLinker.inputType.1302008714" name="ARM-GCC for XMC Linker Input Type" superClass="com.ifx.xmc4000.appLinker.inputType">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -168,7 +172,7 @@
 							<tool id="com.ifx.xmc4000.appDebug.cpplinker.123698739" name="ARM-GCC C++ Linker" superClass="com.ifx.xmc4000.appDebug.cpplinker">
 								<option id="com.ifx.xmc4000.appCppLinker.option.misc.fpu.1462876057" name="Fpu (-mfpu)" superClass="com.ifx.xmc4000.appCppLinker.option.misc.fpu" value="org.eclipse.cdt.cross.arm.gnu.base.option.mfpu.fpv4-sp-d16" valueType="enumerated"/>
 								<option id="com.ifx.xmc4000.appCppLinker.option.misc.mfloat.1993779837" name="Floating point" superClass="com.ifx.xmc4000.appCppLinker.option.misc.mfloat" value="org.eclipse.cdt.cross.arm.gnu.base.option.other.mfloat.softfp" valueType="enumerated"/>
-								<option id="com.ifx.xmc4000.appCppLinker.option.nosys.specs.497129343" superClass="com.ifx.xmc4000.appCppLinker.option.nosys.specs" value="true" valueType="boolean"/>
+								<option id="com.ifx.xmc4000.appCppLinker.option.nosys.specs.497129343" name="Provide default newlib system calls (-specs=nosys.specs)" superClass="com.ifx.xmc4000.appCppLinker.option.nosys.specs" value="true" valueType="boolean"/>
 							</tool>
 							<tool id="com.ifx.xmc4000.libLinker.1000039440" name="ARM-GCC Archiver" superClass="com.ifx.xmc4000.libLinker"/>
 							<tool id="com.ifx.xmc4000.appDebug.createflash.1704092329" name="ARM-GCC Create Flash Image" superClass="com.ifx.xmc4000.appDebug.createflash"/>
@@ -177,11 +181,16 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Dave/Model" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="master_control|state_machine|daisy_chain|edison|Dave/Model" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="daisy_chain"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="edison"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="master_control"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="state_machine"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="ilg.gnuarmeclipse.managedbuild.packs"/>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -206,4 +215,6 @@
 	<storageModule moduleId="org.eclipse.cdt.core.language.mapping">
 		<project-mappings/>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>

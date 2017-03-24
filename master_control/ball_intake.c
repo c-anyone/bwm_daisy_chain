@@ -1,12 +1,12 @@
 /*
- * ballaufnahme.c
+ * ball_intake.c
  *
  *  Created on: Mar 23, 2017
- *      Author: faebsn
+ *      Author: Fabio Pungg
  */
 
 #include <DAVE.h>
-#include "ballaufnahme.h"
+#include "ball_intake.h"
 
 volatile uint32_t endschalter_oben = 3500;
 volatile uint32_t endschalter_unten = 2960;
@@ -17,11 +17,11 @@ volatile XMC_VADC_RESULT_SIZE_t filter =0;
 volatile uint32_t pin_status_neg =1;
 volatile uint32_t pin_status_pos =1;
 
-void ballaufnahme_init(void) {
+void ball_intake_init(void) {
 	ADC_MEASUREMENT_StartConversion(&ADC_MEASUREMENT_0);
 }
 
-void ballaufnahme_move_neg(void)
+void ball_intake_raise(void)
 {
 	if ((pin_status_neg ==1 && pin_status_pos ==1))
 	{
@@ -29,7 +29,7 @@ void ballaufnahme_move_neg(void)
 	}
 }
 
-void ballaufnahme_move_pos(void)
+void ball_intake_lower(void)
 {
 	if ((pin_status_pos ==1 && pin_status_neg ==1))
 	{
@@ -37,7 +37,7 @@ void ballaufnahme_move_pos(void)
 	}
 }
 
-void ballaufnahme_worker(void) {
+void ball_intake_worker(void) {
 		result = ADC_MEASUREMENT_GetResult(&ADC_MEASUREMENT_Channel_A_handle);
 		filter -= (filter-result)*0.05;
 

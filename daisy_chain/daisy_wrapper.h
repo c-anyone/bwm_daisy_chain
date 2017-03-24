@@ -1,5 +1,5 @@
 /*
- * serial.h
+ * daisy_wrapper.h
  *
  *  Created on: Mar 22, 2017
  *      Author: Fabio Pungg
@@ -19,24 +19,22 @@
 #define MACHINE_COUNT (0x04u)
 
 // id definition for this device
-// might be moved to daisy_wrapper.h
+// might be moved to another file (main.c)
 #define MY_ID ID_MASTER
 
 // commands to communicate with daisy devices
-// might be moved to daisy_wrapper.h
 #define CMD_UNDEFINDED (0x00u)
 #define CMD_START	   (0x01u)
 #define CMD_READY	   (0x02u)
+#define CMD_BUSY	   (0x03u)
 
 // type for communication, payload is a placeholder, might be needed
-// for setting motors to specific speeds etc.
+// for setting motors to specific speeds et al
 typedef struct {
 	uint8_t command;
 	uint8_t sender_id;
 	uint16_t payload;
 } daisy_command_t;
-
-
 
 uint8_t daisy_rx_buf[0xff];
 
@@ -45,9 +43,6 @@ void daisy_transmit_buffer(uint8_t id, uint8_t buf[], uint8_t control);
 
 // should be called in a loop to receive data from UART
 void daisy_rx_polling(void);
-
-// callback for received data, should not be needed
-//extern void daisy_received_buffer(uint8_t buf[], uint8_t control, uint8_t id);
 
 void daisy_received_cmd(uint8_t cmd);
 
