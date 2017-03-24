@@ -8,6 +8,9 @@
 #ifndef MACHINE_STATE_H_
 #define MACHINE_STATE_H_
 
+#include <DAVE.h>
+#include <stdbool.h>
+
 typedef enum {
     INIT,
     WAITING,
@@ -20,7 +23,7 @@ typedef enum {
 
 typedef void(*StateEntryFun)();
 typedef void(*StateFun)();
-typedef machine_state_t(*TransitionFun)();
+typedef bool(*TransitionFun)();
 
 
 typedef struct {
@@ -32,7 +35,7 @@ typedef struct {
 
 
 
-void state_machine(machine_state_t*);
+machine_state_t state_machine(machine_state_t);
 
 /**
  * State Functions
@@ -47,12 +50,12 @@ void shot_fired();
 /**
  * Transition Functions
  */
-void init_to_waiting();
-void waiting_to_intake_pos();
-void intake_pos_to_ready();
-void intake_ready_to_shot_ready();
-void shot_ready_to_fired();
-void shot_fired_to_waiting();
+bool init_to_waiting();
+bool waiting_to_intake_pos();
+bool intake_pos_to_ready();
+bool intake_ready_to_shot_ready();
+bool shot_ready_to_fired();
+bool shot_fired_to_waiting();
 
 state_t states[NUM_STATES] = {
 		{INIT, WAITING, &init, &init_to_waiting},
