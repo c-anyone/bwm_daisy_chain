@@ -38,7 +38,7 @@ uint8_t edison_min_tx_space(void){
 
 // should be called in a loop
 void edison_rx_polling() {
-	if(!UART_IsRXFIFOEmpty(&EDISON)) {
+	while(!UART_IsRXFIFOEmpty(&EDISON)) {
 		uint8_t byte = XMC_UART_CH_GetReceivedData(EDISON.channel);
 		edison_min_rx_byte(byte);
 	}

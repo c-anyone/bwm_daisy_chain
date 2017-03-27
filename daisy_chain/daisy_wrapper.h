@@ -12,11 +12,11 @@
 #ifndef DAISY_WRAPPER_H_
 #define DAISY_WRAPPER_H_
 
-#define ID_MASTER  (0x01u)
-#define ID_SLAVE_1 (0x02u)
-#define ID_SLAVE_2 (0x03u)
-#define ID_SLAVE_3 (0x04u)
-#define MACHINE_COUNT (0x04u)
+#define ID_MASTER		(0x01u)
+#define ID_SLAVE_1		(0x02u)
+#define ID_SLAVE_2		(0x03u)
+#define ID_SLAVE_3		(0x04u)
+#define MACHINE_COUNT	(0x04u)
 
 // id definition for this device
 // might be moved to another file (main.c)
@@ -36,6 +36,12 @@ typedef struct {
 	uint16_t payload;
 } daisy_command_t;
 
+typedef struct {
+	bool init;
+	bool ready;
+
+} machine_status_t;
+
 uint8_t daisy_rx_buf[0xff];
 
 // in case still undefined data has to be sent
@@ -53,8 +59,9 @@ void daisy_send_start(uint8_t id);
 
 // to be implemented in main or state machine handler
 extern void daisy_ready_received(uint8_t id);
-extern void daisy_start_received(void);
 extern void daisy_busy_received(uint8_t id);
 extern void daisy_undefined_command(daisy_command_t);
+
+extern void daisy_start_received(void);
 
 #endif /* DAISY_WRAPPER_H_ */

@@ -6,6 +6,7 @@
  */
 
 #include "machine_state.h"
+#include "..\daisy_chain\daisy_wrapper.h"
 
 
 /**
@@ -13,7 +14,54 @@
  * ball intake has to be lowered and sled has to be in waiting position
  * BEFORE magazine starts rotating
  */
-const state_t machine_state[NUM_STATES] = {
+
+static machine_status_t slave_status[MACHINE_COUNT] = {
+		{false,false},
+		{false,false},
+		{false,false},
+		{false,false}
+};
+
+void machine_state_init_done(uint8_t id) {
+	if(id<MACHINE_COUNT) {
+		slave_status[id].init = true;
+	}
+}
+
+void machine_state_set_ready(uint8_t id) {
+	if(id<MACHINE_COUNT) {
+		slave_status[id].ready = true;
+	}
+}
+
+void machine_state_set_busy(uint8_t id) {
+	if(id<MACHINE_COUNT) {
+		slave_status[id].ready = false;
+	}
+}
+
+static inline bool all_boards_init() {
+	for(int i=0;i<MACHINE_COUNT;++i) {
+		if(!slave_status[i].init) {
+			return false;
+		}
+	}
+	return true;
+}
+
+static inline bool all_boards_ready() {
+	for(int i=0;i<MACHINE_COUNT;++i) {
+		if(!slave_status[i].ready) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ *
+ */
+static const state_t machine_state[NUM_STATES] = {
 		{INIT, WAITING, &init, &init_to_waiting},
 		{WAITING, INTAKE_POS, &waiting, &waiting_to_intake_pos},
 		{INTAKE_POS, INTAKE_READY, &intake_pos, &intake_pos_to_ready},
@@ -43,10 +91,12 @@ machine_state_t state_machine(machine_state_t machine_current_state) {
 
 void init() {
 	// send out init signal to everyone
+
 }
 
 bool init_to_waiting() {
 	// check if all init conditions are set
+	// daisy_received
 	return false;
 }
 
@@ -73,7 +123,7 @@ void intake_ready() {
 }
 
 bool intake_ready_to_shot_ready(){
-	// check if sled is done positioning
+	// check if sled is done repositioning
 	return false;
 }
 

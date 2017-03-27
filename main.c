@@ -58,9 +58,6 @@ int main(void)
 
     while(1U)
     {
-
-
-
     }
   }
 
@@ -75,10 +72,12 @@ int main(void)
 }
 void daisy_busy_received(uint8_t sender_id) {
 	// memorize the working status somewhere, master only!
+	machine_state_set_busy(sender_id);
 }
 
 void daisy_ready_received(uint8_t sender_id){
 	// handle the message from a slave in a state machine, master only!
+	machine_state_set_ready(sender_id);
 }
 void daisy_start_received(){
 	// start the necessary transitions and signal to master with

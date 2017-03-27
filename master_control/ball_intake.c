@@ -66,6 +66,7 @@ void ball_intake_worker(void) {
 			else
 			{
 				DIGITAL_IO_SetOutputLow(&TLE_DC_disable);
+				// callback, intake moving done
 				pin_status_neg=1;
 
 			}
@@ -81,6 +82,7 @@ void ball_intake_worker(void) {
 			else
 			{
 				DIGITAL_IO_SetOutputLow(&TLE_DC_disable);
+				// callback, intake moving done
 				pin_status_pos=1;
 
 			}

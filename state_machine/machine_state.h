@@ -33,9 +33,15 @@ typedef struct {
 }state_t;
 
 /**
- * only function to be called from external context
+ *  function to be called in main loop,
+ *  handles state transitions and state working functions
  */
 machine_state_t state_machine(machine_state_t);
+
+void machine_state_init_done(uint8_t id);
+void machine_state_set_ready (uint8_t id);
+void machine_state_set_busy (uint8_t id);
+
 
 /**
  * State Functions, might be moved to .c file
