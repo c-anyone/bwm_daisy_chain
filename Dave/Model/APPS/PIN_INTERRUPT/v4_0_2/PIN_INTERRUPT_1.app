@@ -14,22 +14,22 @@
     <downwardMapList xsi:type="ResourceModel:App" href="../../CPU_CTRL_XMC4/v4_0_12/CPU_CTRL_XMC4_0.app#/"/>
   </requiredApps>
   <hwResources name="External Event" URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/hwres_interrupt" resourceGroupUri="peripheral/cpu/0/nvic/interrupt/*" mResGrpUri="peripheral/cpu/0/nvic/interrupt/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/CPU/CPU_0.dd#//@provided.16"/>
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/CPU/CPU_0.dd#//@provided.21"/>
   </hwResources>
   <hwResources name="Pin" URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/hwres_port_pin" resourceGroupUri="port/p/*/pad/*" mResGrpUri="port/p/*/pad/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/Port2/Port2_2.dd#//@provided.15"/>
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/Port1/Port1_1.dd#//@provided.15"/>
   </hwResources>
   <hwResources name="ers_etl" URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/hwres_eru_ers_etl" resourceGroupUri="peripheral/eru/*/ers_etl/*" mResGrpUri="peripheral/eru/*/ers_etl/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/ERU1/ERU1_1.dd#//@provided.7"/>
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/ERU0/ERU0_0.dd#//@provided.7"/>
   </hwResources>
   <hwResources name="ogu" URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/hwres_eru_ogu" resourceGroupUri="peripheral/eru/*/ogu/*" mResGrpUri="peripheral/eru/*/ogu/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/ERU1/ERU1_1.dd#//@provided.0"/>
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/ERU0/ERU0_0.dd#//@provided.0"/>
   </hwResources>
   <hwResources name="erunmi" URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/hwres_scu_gcu_interrupt_erunmi" resourceGroupUri="peripheral/scu/*/gcu/interrupt/erunmi/*" mResGrpUri="peripheral/scu/*/gcu/interrupt/erunmi/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/SCU/SCU_0.dd#//@provided.18"/>
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/SCU/SCU_0.dd#//@provided.20"/>
   </hwResources>
-  <hwResources name="Pin" URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/__pin_hwres_port_pin" resourceGroupUri="devicepackage/0/*" mResGrpUri="devicepackage/0/*">
-    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/DEVICEPACKAGE/DEVICEPACKAGE_0.dd#//@provided.17"/>
+  <hwResources name="Pin" URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/__pin_hwres_port_pin" resourceGroupUri="devicepackage/0/79" constraintType="GLOBAL_RESOURCE" mResGrpUri="devicepackage/0/*">
+    <downwardMapList xsi:type="ResourceModel:ResourceGroup" href="../../../HW_RESOURCES/DEVICEPACKAGE/DEVICEPACKAGE_0.dd#//@provided.23"/>
   </hwResources>
   <connections URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/http://resources/4.0.2/app/PIN_INTERRUPT/1/vs_pin_interrupt_iopad/http://resources/4.0.2/app/PIN_INTERRUPT/1/vs_pin_interrupt_input_A_B" systemDefined="true" sourceSignal="external_event_pin" targetSignal="signal_a_b" srcVirtualSignal="//@virtualSignals.1" targetVirtualSignal="//@virtualSignals.0"/>
   <connections URI="http://resources/4.0.2/app/PIN_INTERRUPT/1/http://resources/4.0.2/app/PIN_INTERRUPT/1/vs_pin_interrupt_TriggerPulse/http://resources/4.0.2/app/PIN_INTERRUPT/1/vs_pin_interrupt_trin" systemDefined="true" sourceSignal="trigger_out" targetSignal="trigger_in" srcVirtualSignal="//@virtualSignals.2" targetVirtualSignal="//@virtualSignals.3"/>
