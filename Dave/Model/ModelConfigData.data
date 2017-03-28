@@ -108,6 +108,9 @@
   <nodes xsi:type="ApplicationModel:PeripheralNode">
     <resource xsi:type="ResourceModel:Peripheral" href="HW_RESOURCES/ERU1/ERU1_1.dd#/"/>
   </nodes>
+  <nodes xsi:type="ApplicationModel:AppNode">
+    <resource xsi:type="ResourceModel:App" href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#/"/>
+  </nodes>
   <connections xsi:type="ApplicationModel:NodeConnection" source="//@nodes.1" target="//@nodes.0"/>
   <connections xsi:type="ApplicationModel:NodeConnection" source="//@nodes.13" target="//@nodes.0"/>
   <connections xsi:type="ApplicationModel:NodeConnection" source="//@nodes.16" target="//@nodes.0"/>
@@ -115,6 +118,7 @@
   <connections xsi:type="ApplicationModel:NodeConnection" source="//@nodes.24" target="//@nodes.0"/>
   <connections xsi:type="ApplicationModel:NodeConnection" source="//@nodes.25" target="//@nodes.24"/>
   <connections xsi:type="ApplicationModel:NodeConnection" source="//@nodes.34" target="//@nodes.33"/>
+  <connections xsi:type="ApplicationModel:NodeConnection" source="//@nodes.36" target="//@nodes.33"/>
   <hwConnections href="APPS/CLOCK_XMC4/v4_0_22/CLOCK_XMC4_0.app#//@connections.0"/>
   <hwConnections href="APPS/CLOCK_XMC4/v4_0_22/CLOCK_XMC4_0.app#//@connections.5"/>
   <hwConnections href="APPS/CLOCK_XMC4/v4_0_22/CLOCK_XMC4_0.app#//@connections.6"/>
@@ -224,4 +228,10 @@
   <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_0.app#//@connections.3"/>
   <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_0.app#//@connections.4"/>
   <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_0.app#//@connections.5"/>
+  <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@connections.0"/>
+  <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@connections.1"/>
+  <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@connections.2"/>
+  <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@connections.3"/>
+  <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@connections.4"/>
+  <hwConnections href="APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@connections.5"/>
 </ApplicationModel:ApplicationData>

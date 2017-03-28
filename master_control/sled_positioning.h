@@ -9,10 +9,12 @@
 #define SLED_POSITIONING_H_
 
 void sled_init(void);
-void move_pos0(void);
-void move_shot_ready(void);
-void move_shoot(void);
+void sled_move_pos0(void);
+void sled_move_shot_ready(void);
+void sled_move_waiting(void);
+void sled_move_shoot(void);
 
-
+extern void sled_position_reached(void);
+extern void sled_home_position(void);
 
 #endif /* SLED_POSITIONING_H_ */

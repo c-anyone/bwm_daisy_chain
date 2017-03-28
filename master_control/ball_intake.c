@@ -14,8 +14,8 @@ volatile uint32_t endschalter_unten = 2960;
 volatile XMC_VADC_RESULT_SIZE_t result;
 volatile XMC_VADC_RESULT_SIZE_t filter =0;
 
-volatile uint32_t pin_status_neg =1;
-volatile uint32_t pin_status_pos =1;
+volatile uint32_t pin_status_raise =1;
+volatile uint32_t pin_status_lower =1;
 
 void ball_intake_init(void) {
 	ADC_MEASUREMENT_StartConversion(&ADC_MEASUREMENT_0);
@@ -23,17 +23,17 @@ void ball_intake_init(void) {
 
 void ball_intake_raise(void)
 {
-	if ((pin_status_neg ==1 && pin_status_pos ==1))
+	if ((pin_status_raise ==1 && pin_status_lower ==1))
 	{
-		pin_status_neg=0;
+		pin_status_raise=0;
 	}
 }
 
 void ball_intake_lower(void)
 {
-	if ((pin_status_pos ==1 && pin_status_neg ==1))
+	if ((pin_status_lower ==1 && pin_status_raise ==1))
 	{
-		pin_status_pos=0;
+		pin_status_lower=0;
 	}
 }
 
@@ -55,7 +55,7 @@ void ball_intake_worker(void) {
 		//	pin_status_neg = DIGITAL_IO_GetInput(&DIGITAL_IO_move_neg);
 		//	pin_status_pos = DIGITAL_IO_GetInput(&DIGITAL_IO_move_pos);
 
-		if ((pin_status_neg ==0 && pin_status_pos ==1))
+		if ((pin_status_raise ==0 && pin_status_lower ==1))
 		{
 			if (filter > endschalter_unten)
 			{
@@ -67,11 +67,12 @@ void ball_intake_worker(void) {
 			{
 				DIGITAL_IO_SetOutputLow(&TLE_DC_disable);
 				// callback, intake moving done
-				pin_status_neg=1;
+				ball_intake_ready();
+				pin_status_raise=1;
 
 			}
 		}
-		if (pin_status_pos ==0 && pin_status_neg ==1)
+		if (pin_status_lower ==0 && pin_status_raise ==1)
 		{
 			if (filter < endschalter_oben)
 			{
@@ -83,7 +84,8 @@ void ball_intake_worker(void) {
 			{
 				DIGITAL_IO_SetOutputLow(&TLE_DC_disable);
 				// callback, intake moving done
-				pin_status_pos=1;
+				ball_intake_ready();
+				pin_status_lower=1;
 
 			}
 		}

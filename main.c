@@ -11,8 +11,10 @@
 
 #include "daisy_chain/daisy_wrapper.h"
 #include "edison/edison_wrapper.h"
-#include "state_machine/machine_state.h"
+//#include "state_machine/machine_state.h"
+#include "master_control/master_control.h"
 #include "master_control/ball_intake.h"
+//#include "master_control/sled_positioning.h"
 
 // Master  ID = 0x01
 // Slave 1 ID = 0x02
@@ -34,7 +36,7 @@ daisy_command_t com = {
 .sender_id = ID_MASTER
 };
 
-machine_state_t current_machine_state = INIT;
+//machine_state_t current_machine_state = INIT_PHASE_ONE;
 bool motorboard_ready_status[MACHINE_COUNT] = {
 		false,false,false,false
 };
@@ -45,9 +47,7 @@ int main(void)
   DAVE_STATUS_t status;
 
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
-
-  ball_intake_init();
-
+  master_control_init();
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
   XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
@@ -66,18 +66,21 @@ int main(void)
   {
 	edison_rx_polling();
   	daisy_rx_polling();
+
+  	// could be moved to corresponding state
 	ball_intake_worker();
-  	current_machine_state = state_machine(current_machine_state);
+//  	current_machine_state = state_machine(current_machine_state);
   }
 }
+
 void daisy_busy_received(uint8_t sender_id) {
 	// memorize the working status somewhere, master only!
-	machine_state_set_busy(sender_id);
+//	machine_state_set_busy(sender_id);
 }
 
 void daisy_ready_received(uint8_t sender_id){
 	// handle the message from a slave in a state machine, master only!
-	machine_state_set_ready(sender_id);
+//	machine_state_set_ready(sender_id);
 }
 void daisy_start_received(){
 	// start the necessary transitions and signal to master with
@@ -95,11 +98,22 @@ void test_communication(void) {
 void test_ball_intake(uint8_t command) {
 	switch(command) {
 	case 0x11:
-		ball_intake_lower();
+		master_control_start_shot_sequence();
 		break;
 	case 0x12:
-		ball_intake_raise();
+		master_control_get_ball_sequence();
 		break;
 	}
 }
 
+void master_control_waiting() {
+	// sled is done initializing, rotate magazine and trigger ball intake
+}
+
+void master_control_shot_ready() {
+	// ready to shoot
+}
+
+void master_control_shot_done() {
+	// right time to trigger magazine
+}

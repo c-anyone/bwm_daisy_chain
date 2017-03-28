@@ -233,6 +233,7 @@
   <provided xsi:type="ResourceModel:BitField" name="PC2_2_0" URI="http://resources/0.1.40/port/p/2/iocr0/pc2_2_0" value="0" toolTipHelpDescription="Port Control for Port n Pin 0 to 3" defaultValue="0" startPos="19" stopPos="21" accessPermission="rw" maxValue="7" minValue="0"/>
   <provided xsi:type="ResourceModel:BitField" name="PC2_4" URI="http://resources/0.1.40/port/p/2/iocr0/pc2_4" value="0" toolTipHelpDescription="Port Control for Port n Pin 0 to 3" defaultValue="0" startPos="23" stopPos="23" accessPermission="rw" maxValue="1" minValue="0"/>
   <provided xsi:type="ResourceModel:ResourceGroup" name="P2.7 / #53" URI="http://resources/0.1.40/port/p/2/pad/7">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@hwResources.1"/>
     <resourcesList name="out_p" requiredResourceUri="http://resources/0.1.40/port/p/2/out/p7"/>
     <resourcesList name="omr_ps" requiredResourceUri="http://resources/0.1.40/port/p/2/omr/ps7"/>
     <resourcesList name="omr_pr" requiredResourceUri="http://resources/0.1.40/port/p/2/omr/pr7"/>

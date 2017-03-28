@@ -48,7 +48,7 @@ void machine_state_set_busy (uint8_t id);
  * and made static
  */
 void init();
-void waiting();
+void waiting();		// as of now is not used -> not enough digital output
 void intake_pos();
 void intake_ready();
 void shot_ready();
@@ -58,7 +58,7 @@ void shot_fired();
  * Transition Functions, might be moved to .c file
  * and made static
  */
-bool init_to_waiting();
+bool init_to_waiting();			// might directly move to intake
 bool waiting_to_intake_pos();
 bool intake_pos_to_ready();
 bool intake_ready_to_shot_ready();

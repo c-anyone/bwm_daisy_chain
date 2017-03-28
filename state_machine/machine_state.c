@@ -91,6 +91,7 @@ machine_state_t state_machine(machine_state_t machine_current_state) {
 
 void init() {
 	// send out init signal to everyone
+	// init the components controlled from master
 
 }
 
