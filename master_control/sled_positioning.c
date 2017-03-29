@@ -1,7 +1,10 @@
 
 
 #include <DAVE.h>
+#include <stdbool.h>
 #include "sled_positioning.h"
+#define TIMER_5MS	(5000u)
+#define TIMER_50MS	(50000u)
 
 /**
  *  Bit settings on control pins
@@ -14,26 +17,23 @@
  */
 static void trigger_sequence(void);
 
-// delay for 5ms, might be optimized out
-static void delay() {
-	for(int i=0; i<0xFFFF;++i) {
-	}
-}
+static void sled_reactivate_servo(void);
 
-//static void delay_long() {
-//	for(int i=0; i<0x2FF;++i){
-//		delay();
-//	}
-//}
+static uint32_t timer_trigger_5ms;
+static uint32_t timer_servo_50ms;
+static uint32_t timer_home_pos_5ms;
 
 // sets the servo to on
 void sled_init(void){
 	DIGITAL_IO_SetOutputHigh(&SLED_SON);
+	timer_trigger_5ms = SYSTIMER_CreateTimer(TIMER_5MS,SYSTIMER_MODE_ONE_SHOT,(void*)trigger_sequence,NULL);
+	timer_home_pos_5ms = SYSTIMER_CreateTimer(TIMER_5MS,SYSTIMER_MODE_ONE_SHOT,(void*)sled_limit_switch,NULL);
+	timer_servo_50ms = SYSTIMER_CreateTimer(TIMER_50MS,SYSTIMER_MODE_ONE_SHOT,(void*)sled_reactivate_servo,NULL);
 }
 
 void sled_move_pos0(void){
 	if(PIN_INTERRUPT_GetPinValue(&SLED_LIMIT_SWITCH_INTERRUPT) == 0) {
-		sled_home_position();
+		sled_limit_switch();
 	} else {
 		// moves the sled from end to start
 		DIGITAL_IO_SetOutputHigh(&SLED_POS0);
@@ -51,6 +51,7 @@ void sled_move_shot_ready(void){
 
 	trigger_sequence();
 	PIN_INTERRUPT_Enable(&SLED_POSITION_INTERRUPT);
+
 }
 
 void sled_move_waiting(void) {
@@ -69,25 +70,44 @@ void sled_move_shoot(void){
 	PIN_INTERRUPT_Enable(&SLED_POSITION_INTERRUPT);
 }
 
-static void trigger_sequence(void) {
-	delay();
-	DIGITAL_IO_SetOutputHigh(&SLED_CTRG);
-	delay();
-	DIGITAL_IO_SetOutputLow(&SLED_CTRG);
+typedef enum {
+	INPUT_SET=0,
+	INPUT_TRIGGER_LOW,
+	INPUT_TRIGGER_HIGH
+} trigger_state_t;
 
+static void trigger_sequence(void) {
+	static trigger_state_t trigger_state = INPUT_SET;
+
+	switch(trigger_state) {
+	case INPUT_SET:
+		trigger_state = INPUT_TRIGGER_LOW;
+		SYSTIMER_StartTimer(timer_trigger_5ms);
+		break;
+	case INPUT_TRIGGER_LOW:
+		trigger_state = INPUT_TRIGGER_HIGH;
+		DIGITAL_IO_SetOutputHigh(&SLED_CTRG);
+		SYSTIMER_StartTimer(timer_trigger_5ms);
+		break;
+	case INPUT_TRIGGER_HIGH:
+		trigger_state = INPUT_SET;
+		DIGITAL_IO_SetOutputLow(&SLED_CTRG);
+		break;
+	default:
+		break;
+	}
 }
 
 void sled_home_positionIRQ(void){
 	DIGITAL_IO_SetOutputLow(&SLED_SON);
-
-	delay(); delay(); delay(); delay();
-	delay(); delay(); delay(); delay();
-	delay(); delay(); delay(); delay();
-
-	DIGITAL_IO_SetOutputHigh(&SLED_SON);
-	delay();
-	sled_home_position();
+	SYSTIMER_StartTimer(timer_servo_50ms);
 }
+
+static void sled_reactivate_servo(void) {
+	DIGITAL_IO_SetOutputHigh(&SLED_SON);
+	SYSTIMER_StartTimer(timer_home_pos_5ms);
+}
+
 
 void sled_position_reachedIRQ(void){
 	// notify the state machine / controller that the position is reached

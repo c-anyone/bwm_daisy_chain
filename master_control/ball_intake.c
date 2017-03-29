@@ -67,9 +67,8 @@ void ball_intake_worker(void) {
 			{
 				DIGITAL_IO_SetOutputLow(&TLE_DC_disable);
 				// callback, intake moving done
-				ball_intake_ready();
 				pin_status_raise=1;
-
+				ball_intake_ready();
 			}
 		}
 		if (pin_status_lower ==0 && pin_status_raise ==1)
@@ -84,9 +83,8 @@ void ball_intake_worker(void) {
 			{
 				DIGITAL_IO_SetOutputLow(&TLE_DC_disable);
 				// callback, intake moving done
-				ball_intake_ready();
 				pin_status_lower=1;
-
+				ball_intake_ready();
 			}
 		}
 }

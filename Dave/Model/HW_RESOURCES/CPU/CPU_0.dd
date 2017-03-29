@@ -211,5 +211,12 @@
     <resourcesList name="signal_in" requiredResourceUri="http://resources/0.1.31/peripheral/cpu/0/eru0_3_irqhandler"/>
   </provided>
   <provided xsi:type="ResourceModel:BitField" name="setena4" URI="http://resources/0.1.31/peripheral/cpu/0/iser0/setena4" value="0" toolTipHelpDescription="Writing 0 to a SETENA bit has no effect, writing 1 to a bit enables the corresponding interrupt." defaultValue="0" startPos="4" stopPos="4" accessPermission="rw" maxValue="1" minValue="0"/>
+  <provided xsi:type="ResourceModel:ResourceGroup" name="SYSTICK" URI="http://resources/0.1.31/peripheral/cpu/0/systick">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/SYSTIMER/v4_1_14/SYSTIMER_0.app#//@hwResources.0"/>
+    <resourcesList name="csr" requiredResourceUri="http://resources/0.1.31/peripheral/cpu/0/stcsr"/>
+    <resourcesList name="rvr" requiredResourceUri="http://resources/0.1.31/peripheral/cpu/0/strvr"/>
+    <resourcesList name="cvr" requiredResourceUri="http://resources/0.1.31/peripheral/cpu/0/stcvr"/>
+    <resourcesList name="calib" requiredResourceUri="http://resources/0.1.31/peripheral/cpu/0/stcr"/>
+  </provided>
   <addressBlock offset="0x0" size="3488" usage="registers"/>
 </ResourceModel:Peripheral>

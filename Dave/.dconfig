@@ -5,6 +5,7 @@
         <SolverBndMap>
             <BindMap MUri="peripheral/cpu/0/nvic/interrupt/4" Proxy="app/PIN_INTERRUPT/1/hwres_interrupt"/>
             <BindMap MUri="peripheral/scu/0/clkctrl/0/pll" Proxy="app/CLOCK_XMC4/0/hwres_pll"/>
+            <BindMap MUri="peripheral/cpu/0/systick" Proxy="app/SYSTIMER/0/hwres_syst"/>
             <BindMap MUri="port/p/0/pad/2" Proxy="app/DIGITAL_IO/4/hwres_port_pin"/>
             <BindMap MUri="port/p/1/pad/5" Proxy="app/UART/1/hwres_port_pad_uart_tx"/>
             <BindMap MUri="port/debug_port/0/pad/0" Proxy="app/CPU_CTRL_XMC4/0/hwres_port_pad_swd_tck"/>

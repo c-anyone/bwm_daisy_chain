@@ -47,12 +47,6 @@ int main(void)
   DAVE_STATUS_t status;
 
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
-//  ball_intake_init();
-
-  master_control_init();
-
-  XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
-  XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
   if(status != DAVE_STATUS_SUCCESS)
   {
@@ -63,7 +57,12 @@ int main(void)
     {
     }
   }
-//  ball_intake_raise();
+
+  master_control_init();
+
+  XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
+  XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
+
   /* Placeholder for user application code. The while loop below can be replaced with user application code. */
   while(1U)
   {
@@ -72,6 +71,7 @@ int main(void)
 
   	// could be moved to corresponding state
 	ball_intake_worker();
+
 //  	current_machine_state = state_machine(current_machine_state);
   }
 }

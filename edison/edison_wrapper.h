@@ -10,8 +10,6 @@
 #ifndef EDISON_WRAPPER_H_
 #define EDISON_WRAPPER_H_
 
-void delay(uint32_t time);
-
 void set_shoot(void);
 
 void set_coordinate(uint8_t x_low, uint8_t x_high, uint8_t y_low, uint8_t y_high, uint8_t hang);

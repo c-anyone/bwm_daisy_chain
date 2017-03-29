@@ -8,8 +8,6 @@
 #include <DAVE.h>
 #include "edison_wrapper.h"
 
-void delay(uint32_t time);
-
 /* replaced with a communication test function */
 //void set_shoot(void){
 //	linear_pos_start();
