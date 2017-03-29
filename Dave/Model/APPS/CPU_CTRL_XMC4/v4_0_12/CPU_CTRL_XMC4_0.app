@@ -4,7 +4,9 @@
   <upwardMapList xsi:type="ResourceModel:RequiredApp" href="../../PIN_INTERRUPT/v4_0_2/PIN_INTERRUPT_1.app#//@requiredApps.0"/>
   <upwardMapList xsi:type="ResourceModel:RequiredApp" href="../../SYSTIMER/v4_1_14/SYSTIMER_0.app#//@requiredApps.1"/>
   <properties singleton="true" sharable="true"/>
-  <virtualSignals name="nmi_irq" URI="http://resources/4.0.12/app/CPU_CTRL_XMC4/0/vs_nmi_irq" hwSignal="nmi_in" hwResource="//@hwResources.0" visible="true"/>
+  <virtualSignals name="nmi_irq" URI="http://resources/4.0.12/app/CPU_CTRL_XMC4/0/vs_nmi_irq" hwSignal="nmi_in" hwResource="//@hwResources.0" visible="true">
+    <upwardMapList xsi:type="ResourceModel:Connections" href="../../WATCHDOG/v4_0_14/WATCHDOG_0.app#//@connections.1"/>
+  </virtualSignals>
   <virtualSignals name="jtag tck" URI="http://resources/4.0.12/app/CPU_CTRL_XMC4/0/vs_jtag_tck" hwSignal="db_tck" hwResource="//@hwResources.5" required="false" visible="true"/>
   <virtualSignals name="jtag tms" URI="http://resources/4.0.12/app/CPU_CTRL_XMC4/0/vs_jtag_tms" hwSignal="db_tms" hwResource="//@hwResources.5" required="false" visible="true"/>
   <virtualSignals name="jtag tdi" URI="http://resources/4.0.12/app/CPU_CTRL_XMC4/0/vs_jtag_tdi" hwSignal="db_tdi" hwResource="//@hwResources.5" required="false" visible="true"/>

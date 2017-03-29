@@ -63,6 +63,7 @@ int main(void)
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
   XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
+  WATCHDOG_Start();
   /* Placeholder for user application code. The while loop below can be replaced with user application code. */
   while(1U)
   {
@@ -72,6 +73,7 @@ int main(void)
   	// could be moved to corresponding state
 	ball_intake_worker();
 
+	WATCHDOG_Service();
 //  	current_machine_state = state_machine(current_machine_state);
   }
 }

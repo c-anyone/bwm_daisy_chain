@@ -13,6 +13,7 @@
             <BindMap MUri="port/p/14/pad/0" Proxy="app/ADC_MEASUREMENT/0/rarray_hwres_adc_measurement_channel_pin#1"/>
             <BindMap MUri="port/p/0/pad/0" Proxy="app/UART/0/hwres_port_pad_uart_rx"/>
             <BindMap MUri="devicepackage/0/100" Proxy="app/DIGITAL_IO/4/__pin_hwres_port_pin"/>
+            <BindMap MUri="peripheral/wdt/0/wdt" Proxy="app/WATCHDOG/0/hwres_wdt_wdt"/>
             <BindMap MUri="devicepackage/0/76" Proxy="app/PIN_INTERRUPT/0/__pin_hwres_port_pin"/>
             <BindMap MUri="peripheral/scu/0/gcu/interrupt/erunmi/3" Proxy="app/PIN_INTERRUPT/1/hwres_scu_gcu_interrupt_erunmi"/>
             <BindMap MUri="peripheral/scu/0/gcu/ccu4_global_enable/0" Proxy="app/GLOBAL_CCU4/0/hwres_peripheral_scu_gcu_ccu4_global_enable"/>
@@ -32,6 +33,7 @@
             <BindMap MUri="peripheral/cpu/0/nvic/interrupt/5" Proxy="app/PIN_INTERRUPT/0/hwres_interrupt"/>
             <BindMap MUri="peripheral/eru/1/ogu/0" Proxy="app/PIN_INTERRUPT/0/hwres_eru_ogu"/>
             <BindMap MUri="peripheral/scu/0/clkctrl/0/ebu" Proxy="app/CLOCK_XMC4/0/hwres_ebu"/>
+            <BindMap MUri="peripheral/scu/0/gcu/interrupt/prewarn" Proxy="app/WATCHDOG/0/hwres_scu_gcu_interrupt_prewarn"/>
             <BindMap MUri="peripheral/vadc/0/global" Proxy="app/GLOBAL_ADC/0/hwres_vadc_global"/>
             <BindMap MUri="peripheral/vadc/0/global_limits" Proxy="app/GLOBAL_ADC/0/hwres_vadc_global_Limit"/>
             <BindMap MUri="devicepackage/0/99" Proxy="app/DIGITAL_IO/6/__pin_hwres_port_pin"/>
