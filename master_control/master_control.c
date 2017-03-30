@@ -34,17 +34,13 @@ static void master_state_machine(void) {
 		sled_move_pos0();
 		break;
 	case MASTER_INIT_TWO:
-		if(PIN_INTERRUPT_GetPinValue(&SLED_LIMIT_SWITCH_INTERRUPT) == 0) {
 			cur_master_state = MASTER_INIT_THREE;
 			sled_move_waiting();
-		}
 		break;
 	case MASTER_INIT_THREE:
-		if(PIN_INTERRUPT_GetPinValue(&SLED_POSITION_INTERRUPT) == 0) {
 			cur_master_state = MASTER_WAITING;
 			master_control_waiting();
 			// signal sled init done
-		}
 		break;
 	case MASTER_WAITING:
 		// do nothing till the next sequence is triggered
@@ -61,11 +57,10 @@ static void master_state_machine(void) {
 		cur_master_state = MASTER_SHOT_READY_ONE;
 		sled_move_shot_ready();
 	case MASTER_SHOT_READY_ONE:
-		if(PIN_INTERRUPT_GetPinValue(&SLED_POSITION_INTERRUPT) == 0) {
-			cur_master_state = MASTER_SHOT_READY_TWO;
-			master_control_shot_ready();
-		}
-		break;
+
+		cur_master_state = MASTER_SHOT_READY_TWO;
+		master_control_shot_ready();
+	break;
 	case MASTER_SHOT_READY_TWO:
 		// do nothing till the shooting sequence is triggered
 		break;
@@ -74,23 +69,18 @@ static void master_state_machine(void) {
 		sled_move_shoot();
 		break;
 	case MASTER_SHOOTING:
-		if(PIN_INTERRUPT_GetPinValue(&SLED_POSITION_INTERRUPT) == 0) {
-
 			cur_master_state = MASTER_SHOT_DONE;
 			ball_intake_lower();
-		}
 		break;
 	case MASTER_SHOT_DONE:
 		cur_master_state = MASTER_TAKE_BALL_SEQUENCE;
-		if(PIN_INTERRUPT_GetPinValue(&SLED_POSITION_INTERRUPT) == 0) {
 			master_control_shot_done();
 			sled_move_pos0();
-		}
 		break;
 	default:
 		// error
 		break;
-	}
+}
 }
 
 void master_control_get_ball_sequence(void) {
@@ -137,6 +127,7 @@ void sled_limit_switch(void) {
  * triggered by servo controller
  */
 void sled_position_reached(void) {
-
-	master_state_machine();
+	if(PIN_INTERRUPT_GetPinValue(&SLED_POSITION_INTERRUPT) == 0) {
+		master_state_machine();
+	}
 }
