@@ -10,23 +10,12 @@
 #include "ball_intake.h"
 #include "sled_positioning.h"
 
+static master_states_t cur_master_state = MASTER_INIT_ONE;
 
-typedef enum {
-	MASTER_INIT_ONE = 0,		// lower ball intake
-	MASTER_INIT_TWO,			// move sled back to pos0
-	MASTER_INIT_THREE,			// move sled to waiting
-	MASTER_WAITING,				// wait for take ball sequence trigger
-	MASTER_TAKE_BALL_SEQUENCE,	// move sled to pos0
-	MASTER_SLED_INTAKE_POS,		// raise ball intake
-	MASTER_BALL_TAKEN,			// move sled to shot ready position
-	MASTER_SHOT_READY_ONE,		// shot ready reached, indicate shot ready
-	MASTER_SHOT_READY_TWO,		// wait for shot ready trigger
-	MASTER_SHOT_SEQUENCE,		// move sled (quick) to end pos
-	MASTER_SHOOTING,			// lower ball intake
-	MASTER_SHOT_DONE			// indicate shot done, take ball sequence
-} master_states_t;
+master_states_t get_master_state(void) {
+	return cur_master_state;
+}
 
-master_states_t cur_master_state = MASTER_INIT_ONE;
 static void master_state_machine(void) {
 	switch(cur_master_state) {
 	case MASTER_INIT_ONE:

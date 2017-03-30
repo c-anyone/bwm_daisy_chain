@@ -11,7 +11,7 @@
 
 #include "daisy_chain/daisy_wrapper.h"
 #include "edison/edison_wrapper.h"
-//#include "state_machine/machine_state.h"
+#include "state_machine/machine_state.h"
 #include "master_control/master_control.h"
 #include "master_control/ball_intake.h"
 //#include "master_control/sled_positioning.h"
@@ -41,12 +41,17 @@ bool motorboard_ready_status[MACHINE_COUNT] = {
 		false,false,false,false
 };
 
+machine_state_t cur_machine_state = INIT_PHASE_ONE;
 
 int main(void)
 {
   DAVE_STATUS_t status;
 
   status = DAVE_Init();           /* Initialization of DAVE APPs  */
+
+  for(int i=0;i<0xFFFF;++i) {
+	  __NOP();
+  }
 
   if(status != DAVE_STATUS_SUCCESS)
   {
@@ -58,10 +63,11 @@ int main(void)
     }
   }
 
-  master_control_init();
 
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
   XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
+
+  master_control_init();
 
   WATCHDOG_Start();
   /* Placeholder for user application code. The while loop below can be replaced with user application code. */
@@ -72,6 +78,8 @@ int main(void)
 
   	// could be moved to corresponding state
 	ball_intake_worker();
+
+	cur_machine_state = state_machine(cur_machine_state);
 
 	WATCHDOG_Service();
 //  	current_machine_state = state_machine(current_machine_state);
@@ -96,14 +104,20 @@ void daisy_undefined_command(daisy_command_t cmd) {
 	// evaluate the undefined command here and act accordingly
 }
 
+//void daisy_ping_received() {
+//	// signal to state machine that everyone is responding
+//
+//}
+
 void test_communication(void) {
 	daisy_transmit_buffer(ID_MASTER,(uint8_t*)&com,sizeof(com));
 }
 
-void test_ball_intake(uint8_t command) {
+void test_command(uint8_t command) {
 	switch(command) {
 	case 0x11:
-		master_control_start_shot_sequence();
+//		master_control_start_shot_sequence();
+		machine_state_external_trigger();
 		break;
 	case 0x12:
 		master_control_get_ball_sequence();
@@ -113,12 +127,15 @@ void test_ball_intake(uint8_t command) {
 
 void master_control_waiting() {
 	// sled is done initializing, rotate magazine and trigger ball intake
+	machine_state_set_ready(ID_MASTER);
 }
 
 void master_control_shot_ready() {
 	// ready to shoot
+	machine_state_set_ready(ID_MASTER);
 }
 
 void master_control_shot_done() {
+	master_control_shot_done();
 	// right time to trigger magazine
 }

@@ -12,6 +12,7 @@
 #ifndef DAISY_WRAPPER_H_
 #define DAISY_WRAPPER_H_
 
+#define ID_PING			(0x00u)
 #define ID_MASTER		(0x01u)
 #define ID_SLAVE_1		(0x02u)
 #define ID_SLAVE_2		(0x03u)
@@ -27,6 +28,7 @@
 #define CMD_START	   (0x01u)
 #define CMD_READY	   (0x02u)
 #define CMD_BUSY	   (0x03u)
+#define CMD_PING	   (0x04u)
 
 // type for communication, payload is a placeholder, might be needed
 // for setting motors to specific speeds et al
@@ -56,10 +58,14 @@ void daisy_received_cmd(uint8_t cmd);
 void daisy_send_ready(void);
 // send start should only be used from master, as it keeps global state
 void daisy_send_start(uint8_t id);
+// ping to verify working communication
+void daisy_ping(void);
+
 
 // to be implemented in main or state machine handler
 extern void daisy_ready_received(uint8_t id);
 extern void daisy_busy_received(uint8_t id);
+extern void daisy_ping_received(void);
 extern void daisy_undefined_command(daisy_command_t);
 
 extern void daisy_start_received(void);

@@ -48,7 +48,7 @@ void edison_min_tx_byte(uint8_t byte){
 
 void edison_min_frame_received(uint8_t buf[], uint8_t control, uint8_t id){
 	edison_min_tx_frame(id, buf, control);
-	test_ball_intake(id);
+	test_command(id);
 	if (id == 0x11){
 //		set_shoot();
 	}

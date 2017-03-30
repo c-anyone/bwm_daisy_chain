@@ -12,23 +12,24 @@
 #include <stdbool.h>
 
 typedef enum {
-    INIT,
-    WAITING,
-    INTAKE_POS,
-    INTAKE_READY,
+    INIT_PHASE_ONE,
+    INIT_PHASE_TWO,
+    ROTATE_MAGAZINE,
+    BALL_INTAKE,
     SHOT_READY,
-    SHOT_FIRED,
+    SHOOTING,
     NUM_STATES
 } machine_state_t;
 
 typedef void(*StateEntryFun)();
-typedef void(*StateEntryFun)();
+typedef void(*StateFun)();
 typedef bool(*TransitionFun)();
 
 typedef struct {
 	machine_state_t cur_state;
 	machine_state_t next_state;
 	StateEntryFun entryFun;
+	StateFun	  stateFun;
 	TransitionFun transFun;
 }state_t;
 
@@ -38,31 +39,11 @@ typedef struct {
  */
 machine_state_t state_machine(machine_state_t);
 
+
 void machine_state_init_done(uint8_t id);
 void machine_state_set_ready (uint8_t id);
 void machine_state_set_busy (uint8_t id);
+void machine_state_external_trigger(void);
 
-
-/**
- * State Functions, might be moved to .c file
- * and made static
- */
-void init();
-void waiting();		// as of now is not used -> not enough digital output
-void intake_pos();
-void intake_ready();
-void shot_ready();
-void shot_fired();
-
-/**
- * Transition Functions, might be moved to .c file
- * and made static
- */
-bool init_to_waiting();			// might directly move to intake
-bool waiting_to_intake_pos();
-bool intake_pos_to_ready();
-bool intake_ready_to_shot_ready();
-bool shot_ready_to_fired();
-bool shot_fired_to_waiting();
 
 #endif /* MACHINE_STATE_H_ */
