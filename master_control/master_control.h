@@ -12,7 +12,8 @@ typedef enum {
 	MASTER_INIT_ONE = 0,		// lower ball intake
 	MASTER_INIT_TWO,			// move sled back to pos0
 	MASTER_INIT_THREE,			// move sled to waiting
-	MASTER_WAITING,				// wait for take ball sequence trigger
+	MASTER_WAITING_ONE,				// wait for take ball sequence trigger
+	MASTER_WAITING_TWO,
 	MASTER_TAKE_BALL_SEQUENCE,	// move sled to pos0
 	MASTER_SLED_INTAKE_POS,		// raise ball intake
 	MASTER_BALL_TAKEN,			// move sled to shot ready position

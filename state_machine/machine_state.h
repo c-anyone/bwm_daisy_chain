@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 typedef enum {
-    INIT_PHASE_ONE,
+    INIT_PHASE_ONE=0,
     INIT_PHASE_TWO,
     ROTATE_MAGAZINE,
     BALL_INTAKE,

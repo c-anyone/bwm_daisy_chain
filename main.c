@@ -63,11 +63,8 @@ int main(void)
     }
   }
 
-
   XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
   XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
-
-  master_control_init();
 
   WATCHDOG_Start();
   /* Placeholder for user application code. The while loop below can be replaced with user application code. */
@@ -93,7 +90,7 @@ void daisy_busy_received(uint8_t sender_id) {
 
 void daisy_ready_received(uint8_t sender_id){
 	// handle the message from a slave in a state machine, master only!
-//	machine_state_set_ready(sender_id);
+	machine_state_set_ready(sender_id);
 }
 void daisy_start_received(){
 	// start the necessary transitions and signal to master with
@@ -103,11 +100,6 @@ void daisy_start_received(){
 void daisy_undefined_command(daisy_command_t cmd) {
 	// evaluate the undefined command here and act accordingly
 }
-
-//void daisy_ping_received() {
-//	// signal to state machine that everyone is responding
-//
-//}
 
 void test_communication(void) {
 	daisy_transmit_buffer(ID_MASTER,(uint8_t*)&com,sizeof(com));
@@ -120,7 +112,7 @@ void test_command(uint8_t command) {
 		machine_state_external_trigger();
 		break;
 	case 0x12:
-		master_control_get_ball_sequence();
+//		master_control_get_ball_sequence();
 		break;
 	}
 }
@@ -136,6 +128,6 @@ void master_control_shot_ready() {
 }
 
 void master_control_shot_done() {
-	master_control_shot_done();
 	// right time to trigger magazine
+	machine_state_set_ready(ID_MASTER);
 }

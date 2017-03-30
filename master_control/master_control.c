@@ -23,15 +23,18 @@ static void master_state_machine(void) {
 		sled_move_pos0();
 		break;
 	case MASTER_INIT_TWO:
-			cur_master_state = MASTER_INIT_THREE;
-			sled_move_waiting();
+		cur_master_state = MASTER_INIT_THREE;
+		sled_move_waiting();
 		break;
 	case MASTER_INIT_THREE:
-			cur_master_state = MASTER_WAITING;
-			master_control_waiting();
-			// signal sled init done
+		cur_master_state = MASTER_WAITING_TWO;
+		master_control_waiting();
 		break;
-	case MASTER_WAITING:
+	case MASTER_WAITING_ONE:
+		// signal sled init done
+		cur_master_state = MASTER_WAITING_TWO;
+		break;
+	case MASTER_WAITING_TWO:
 		// do nothing till the next sequence is triggered
 		break;
 	case MASTER_TAKE_BALL_SEQUENCE:
@@ -46,10 +49,9 @@ static void master_state_machine(void) {
 		cur_master_state = MASTER_SHOT_READY_ONE;
 		sled_move_shot_ready();
 	case MASTER_SHOT_READY_ONE:
-
 		cur_master_state = MASTER_SHOT_READY_TWO;
 		master_control_shot_ready();
-	break;
+		break;
 	case MASTER_SHOT_READY_TWO:
 		// do nothing till the shooting sequence is triggered
 		break;
@@ -58,22 +60,22 @@ static void master_state_machine(void) {
 		sled_move_shoot();
 		break;
 	case MASTER_SHOOTING:
-			cur_master_state = MASTER_SHOT_DONE;
-			ball_intake_lower();
+		cur_master_state = MASTER_SHOT_DONE;
+		ball_intake_lower();
+		master_control_waiting();
 		break;
 	case MASTER_SHOT_DONE:
 		cur_master_state = MASTER_TAKE_BALL_SEQUENCE;
-			master_control_shot_done();
-			sled_move_pos0();
+		sled_move_pos0();
 		break;
 	default:
 		// error
 		break;
-}
+	}
 }
 
 void master_control_get_ball_sequence(void) {
-	if(cur_master_state!= MASTER_WAITING) {
+	if(cur_master_state!= MASTER_WAITING_TWO) {
 		// do nothing, wrong state for triggering the get ball sequence
 	}
 	else {

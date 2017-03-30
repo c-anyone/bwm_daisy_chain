@@ -36,21 +36,18 @@ static bool shot_sequence_end(void);
 void machine_state_set_ready(uint8_t);
 void machine_state_set_busy(uint8_t);
 
-static const state_t machine_state[NUM_STATES] = {
-		{INIT_PHASE_ONE, INIT_PHASE_TWO,  init_phase_one, NULL,  init_phase_one_to_two},
+static const state_t machine_state[NUM_STATES+1] = {
+		{INIT_PHASE_ONE, INIT_PHASE_TWO,   init_phase_one, NULL,  init_phase_one_to_two},
 		{INIT_PHASE_TWO, ROTATE_MAGAZINE,  init_phase_two,NULL,  init_two_to_sled_ready},
-		{ROTATE_MAGAZINE, BALL_INTAKE,  rotate_magazine, NULL,  rotate_magazine_done},
-		{BALL_INTAKE, SHOT_READY,  ball_intake, NULL,  ball_intake_done},
-		{SHOT_READY, SHOOTING, NULL,NULL,trigger_shot_sequence},
-		{SHOOTING, ROTATE_MAGAZINE, shot_sequence_start, NULL, shot_sequence_end}
+		{ROTATE_MAGAZINE, BALL_INTAKE,     rotate_magazine, NULL,  rotate_magazine_done},
+		{BALL_INTAKE, SHOT_READY,          ball_intake, NULL,  ball_intake_done},
+		{SHOT_READY, SHOOTING, 			   NULL,NULL,trigger_shot_sequence},
+		{SHOOTING, ROTATE_MAGAZINE, 	   shot_sequence_start, NULL, shot_sequence_end}
 };
 
 // external callback, will be moved away. responsible for kicking the dog on slaves
 void daisy_ping_received(void) {
 	daisy_status = true;
-	for(int i = 0;i<MACHINE_COUNT;++i) {
-		machine_state_set_ready(i);
-	}
 }
 
 static machine_status_t slave_status[MACHINE_COUNT] = {
@@ -68,20 +65,26 @@ void machine_state_init_done(uint8_t id) {
 }
 
 void machine_state_set_ready(uint8_t id) {
-	if(id<MACHINE_COUNT) {
+	if(id<MACHINE_COUNT+1) {
 		slave_status[id - 1].ready = true;
 	}
 }
 
 void machine_state_set_busy(uint8_t id) {
-	if(id<MACHINE_COUNT) {
+	if(id<MACHINE_COUNT+1) {
 		slave_status[id - 1].ready = false;
+	}
+}
+
+static inline void set_all_ready(void) {
+	for(int i=0;i<MACHINE_COUNT;++i) {
+		slave_status[i].ready = true;
 	}
 }
 
 static inline bool all_boards_init() {
 	for(int i=0;i<MACHINE_COUNT;++i) {
-		if(!slave_status[i].init) {
+		if(slave_status[i].init == false) {
 			return false;
 		}
 	}
@@ -90,7 +93,7 @@ static inline bool all_boards_init() {
 
 static inline bool all_boards_ready() {
 	for(int i=0;i<MACHINE_COUNT;++i) {
-		if(!slave_status[i].ready) {
+		if(slave_status[i].ready == false) {
 			return false;
 		}
 	}
@@ -139,6 +142,9 @@ static void init_phase_one() {
 static bool init_phase_one_to_two() {
 	// check if all init conditions are set
 	// daisy_ping_received
+	if(daisy_status) {
+		set_all_ready();
+	}
 	return daisy_status;
 }
 
@@ -149,7 +155,7 @@ static void init_phase_two() {
 }
 
 static bool init_two_to_sled_ready() {
-//	return get_master_state == MASTER_WAITING;
+	//	return get_master_state == MASTER_WAITING;
 	return all_boards_ready();
 }
 
@@ -172,7 +178,7 @@ static bool ball_intake_done(void) {
 }
 
 static bool trigger_shot_sequence(void) {
-	if(external_trigger) {
+	if(external_trigger == true) {
 		external_trigger = false;
 		return true;
 	}
@@ -185,6 +191,9 @@ static void shot_sequence_start(void) {
 }
 
 static bool shot_sequence_end(void) {
-	return all_boards_ready();
+	if(all_boards_ready()) {
+		return true;
+	}
+	return false;
 }
 
