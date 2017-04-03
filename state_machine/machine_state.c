@@ -50,6 +50,11 @@ void daisy_ping_received(void) {
 	daisy_status = true;
 }
 
+typedef struct {
+	bool init;
+	bool ready;
+}machine_status_t;
+
 static machine_status_t slave_status[MACHINE_COUNT] = {
 		{false,false},
 		{false,false},

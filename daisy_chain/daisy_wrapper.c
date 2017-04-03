@@ -10,31 +10,48 @@
 
 static uint8_t daisy_tx_buf[0xff];
 static daisy_command_t command = {.command = CMD_UNDEFINDED,
-		.payload = 0,
+		.payload = NULL,
 		.sender_id = MY_ID
 };
 
+
+
 void min_frame_received(uint8_t buf[], uint8_t control, uint8_t id) {
-	memcpy(&command,buf,control);
+	if(control<sizeof(command)) {
+		// no payload should ever be smaller than command
+		return;
+	}
+	memcpy(&command,buf,sizeof(command));
 	if(id == ID_PING) {
 		daisy_ping_received();
-		if(MY_ID != ID_MASTER) {
+		if(ID_MASTER == MY_ID) {
 			min_tx_frame(id,buf,control);
 		}
 	}
 	else if(id == MY_ID){
 		switch (command.command) {
+#ifdef MASTER_DEVICE
 		case CMD_READY:
 			daisy_ready_received(command.sender_id);
 			break;
+		case CMD_BUSY:
+			daisy_busy_received(command.sender_id);
+			break;
+#elif defined SLAVE_DEVICE
 		case CMD_START:
 			daisy_start_received();
 			break;
 		case CMD_UNDEFINDED:
 			daisy_undefined_command(command);
 			break;
-		case CMD_BUSY:
-			daisy_busy_received(command.sender_id);
+
+#endif
+		case CMD_PAYLOAD:
+			if(control>sizeof(command)&&buf[sizeof(command)]<0xFC) {
+//				memcpy
+			}
+			break;
+		default:
 			break;
 		}
 	} else {
@@ -66,17 +83,37 @@ void daisy_ping() {
 	min_tx_frame(ID_PING,(uint8_t*)&command,sizeof(command));
 }
 
-void daisy_send_ready() {
-	command.command = CMD_READY;
-	min_tx_frame(ID_MASTER,(uint8_t*)&command,sizeof(command));
+void daisy_send_payload(uint8_t id, uint8_t* payload, uint8_t length) {
+	if(sizeof(command)+length<0xFD) {
+		command.command = CMD_PAYLOAD;
+		command.sender_id = MY_ID;
+		daisy_tx_buf[0] = command.command;
+		daisy_tx_buf[1] = command.sender_id;
+		daisy_tx_buf[3] = length;
+//		memcpy(daisy_tx_buf,sizeof(command)+1,payload,length);
+//		min_tx_frame(id,daisy_tx_buf,sizeof(command)+length);
+	}
 }
-
+#ifdef MASTER_DEVICE
 void daisy_send_start(uint8_t id) {
 	command.command = CMD_START;
 	command.sender_id = MY_ID;
 	min_tx_frame(id,(uint8_t*)&command,sizeof(command));
 }
+#elif defined SLAVE_DEVICE
+void daisy_send_ready(void) {
+	command.command = CMD_READY;
+	command.sender_id = MY_ID;
+	min_tx_frame(ID_MASTER,(uint8_t*)&command,sizeof(command));
+}
 
+void daisy_send_busy(void) {
+	command.command = CMD_BUSY;
+	command.sender_id = MY_ID;
+	min_tx_frame(ID_MASTER,(uint8_t*)&command,sizeof(command));
+}
+
+#endif
 void min_tx_byte(uint8_t byte) {
 	UART_Transmit(&DAISY,&byte,sizeof(uint8_t));
 }

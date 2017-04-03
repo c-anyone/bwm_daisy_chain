@@ -32,7 +32,6 @@
  */
 daisy_command_t com = {
 .command = CMD_UNDEFINDED,
-.payload = 0xAFFE,
 .sender_id = ID_MASTER
 };
 
