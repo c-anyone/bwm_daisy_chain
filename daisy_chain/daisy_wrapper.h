@@ -16,11 +16,11 @@
 
 #define DAISY_PORT		(0x00u)
 
-#define ID_PING			(0x00u)
-#define ID_MASTER		(0x01u)
-#define ID_SLAVE_1		(0x02u)
-#define ID_SLAVE_2		(0x03u)
-#define ID_SLAVE_3		(0x04u)
+#define ID_PING			(0xBBu)
+#define ID_MASTER		(0x00u)
+#define ID_SLAVE_1		(0x01u)
+#define ID_SLAVE_2		(0x02u)
+#define ID_SLAVE_3		(0x03u)
 #define MACHINE_COUNT	(0x04u)
 
 // id definition for this device

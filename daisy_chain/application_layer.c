@@ -17,6 +17,10 @@ static daisy_command_t command = {.command = CMD_UNDEFINED,
 static daisy_set_callback set_callback = NULL;
 static daisy_get_callback get_callback = NULL;
 static daisy_start_callback start_callback = NULL;
+static daisy_ack_callback ack_callback = NULL;
+static daisy_busy_callback busy_callback = NULL;
+static daisy_ready_callback ready_callback = NULL;
+static daisy_status_callback status_callback = NULL;
 /*
  * callback function from daisy_wrapper, used when a payload
  * is addressed to this device
@@ -36,8 +40,14 @@ void daisy_payload_received(uint8_t* payload, uint8_t length) {
 		}
 		break;
 	case CMD_READY:
+		if(ready_callback != NULL) {
+			(*ready_callback)(cmd_p->sender_id);
+		}
 		break;
 	case CMD_BUSY:
+		if(busy_callback != NULL) {
+			(*busy_callback)(cmd_p->sender_id);
+		}
 		break;
 	case CMD_SET_PARAM:
 		if(set_callback!=NULL) {
@@ -49,6 +59,15 @@ void daisy_payload_received(uint8_t* payload, uint8_t length) {
 			(*get_callback)(cmd_p->param);
 		}
 		break;
+	case CMD_ACK:
+		if(ack_callback != NULL) {
+			(*ack_callback)(cmd_p->sender_id);
+		}
+		break;
+	case CMD_STATUS:
+		if(status_callback != NULL) {
+			(*status_callback)(cmd_p->sender_id,cmd_p->payload);
+		}
 	default:
 		break;
 	}
@@ -72,6 +91,22 @@ void set_cmd_set_callback(daisy_set_callback function) {
 
 void set_cmd_get_callback(daisy_get_callback function) {
 	get_callback = function;
+}
+
+void set_cmd_ack_callback(daisy_ack_callback function) {
+	ack_callback = function;
+}
+
+void set_cmd_busy_callback(daisy_busy_callback function) {
+	busy_callback = function;
+}
+
+void set_cmd_ready_callback(daisy_ready_callback function) {
+	ready_callback = function;
+}
+
+void set_cmd_status_callback(daisy_status_callback function) {
+	status_callback = function;
 }
 
 #ifdef MASTER_DEVICE

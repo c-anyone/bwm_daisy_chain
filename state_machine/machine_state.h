@@ -39,6 +39,7 @@ typedef struct {
  */
 machine_state_t state_machine(machine_state_t);
 
+void machine_state_init(void);
 
 void machine_state_init_done(uint8_t id);
 void machine_state_set_ready (uint8_t id);
