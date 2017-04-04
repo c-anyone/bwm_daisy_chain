@@ -6,7 +6,7 @@
  */
 
 #include "machine_state.h"
-#include "..\daisy_chain\daisy_wrapper.h"
+#include "..\daisy_chain\application_layer.h"
 #include "master_control\master_control.h"
 
 /**
@@ -44,11 +44,6 @@ static const state_t machine_state[NUM_STATES+1] = {
 		{SHOT_READY, SHOOTING, 			   NULL,NULL,trigger_shot_sequence},
 		{SHOOTING, ROTATE_MAGAZINE, 	   shot_sequence_start, NULL, shot_sequence_end}
 };
-
-// external callback, will be moved away. responsible for kicking the dog on slaves
-void daisy_ping_received(void) {
-	daisy_status = true;
-}
 
 typedef struct {
 	bool init;
@@ -141,7 +136,7 @@ machine_state_t state_machine(machine_state_t machine_current_state) {
 
 // check daisy chain connection status
 static void init_phase_one() {
-	daisy_ping();
+//	daisy_ping();
 }
 
 static bool init_phase_one_to_two() {
@@ -166,7 +161,7 @@ static bool init_two_to_sled_ready() {
 
 static void rotate_magazine(void) {
 	machine_state_set_busy(ID_SLAVE_1);
-	daisy_send_start(ID_SLAVE_1);
+	signal_start(ID_SLAVE_1,0);
 }
 
 static bool rotate_magazine_done(void) {

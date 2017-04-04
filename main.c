@@ -9,7 +9,7 @@
 
 #include <stdbool.h>
 
-#include "daisy_chain/daisy_wrapper.h"
+#include "daisy_chain/application_layer.h"
 #include "edison/edison_wrapper.h"
 #include "state_machine/machine_state.h"
 #include "master_control/master_control.h"
@@ -31,7 +31,7 @@
  * code.
  */
 daisy_command_t com = {
-.command = CMD_UNDEFINDED,
+.command = CMD_UNDEFINED,
 .sender_id = ID_MASTER
 };
 
@@ -70,9 +70,9 @@ int main(void)
   while(1U)
   {
 	edison_rx_polling();
-  	daisy_rx_polling();
+	application_worker();
 
-  	// could be moved to corresponding state
+	// could be moved to corresponding state
 	ball_intake_worker();
 
 	cur_machine_state = state_machine(cur_machine_state);
@@ -98,10 +98,6 @@ void daisy_start_received(){
 
 void daisy_undefined_command(daisy_command_t cmd) {
 	// evaluate the undefined command here and act accordingly
-}
-
-void test_communication(void) {
-	daisy_transmit_buffer(ID_MASTER,(uint8_t*)&com,sizeof(com));
 }
 
 void test_command(uint8_t command) {

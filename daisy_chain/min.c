@@ -401,7 +401,7 @@ static void valid_frame_received(struct min_context *self)
             break;
     }
 #else
-    min_application_handler(id_control & (uint8_t)0x3fU, payload, payload_len);
+    min_application_handler(id_control & (uint8_t)0x3fU, payload, payload_len,self->port);
 #endif
 }
 
