@@ -37,7 +37,7 @@ typedef struct {
  *  function to be called in main loop,
  *  handles state transitions and state working functions
  */
-machine_state_t state_machine(machine_state_t);
+machine_state_t old_state_machine(machine_state_t);
 
 void machine_state_init(void);
 

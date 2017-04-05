@@ -11,7 +11,9 @@
 
 #include "daisy_chain/application_layer.h"
 #include "edison/edison_wrapper.h"
-#include "state_machine/machine_state.h"
+#include "state_machine/new_state_machine.h"
+//#include "state_machine/machine_state.h"
+#include "master_control/sled_positioning.h"
 #include "master_control/master_control.h"
 #include "master_control/ball_intake.h"
 //#include "master_control/sled_positioning.h"
@@ -31,8 +33,8 @@
  * code.
  */
 daisy_command_t com = {
-.command = CMD_UNDEFINED,
-.sender_id = ID_MASTER
+		.command = CMD_UNDEFINED,
+		.sender_id = ID_MASTER
 };
 
 //machine_state_t current_machine_state = INIT_PHASE_ONE;
@@ -40,89 +42,68 @@ bool motorboard_ready_status[MACHINE_COUNT] = {
 		false,false,false,false
 };
 
-machine_state_t cur_machine_state = INIT_PHASE_ONE;
+states_t cur_machine_state = I1_POWERED_UP;
 
 int main(void)
 {
-  DAVE_STATUS_t status;
+	DAVE_STATUS_t status;
 
-  status = DAVE_Init();           /* Initialization of DAVE APPs  */
+	status = DAVE_Init();           /* Initialization of DAVE APPs  */
 
-  for(int i=0;i<0xFFFF;++i) {
-	  __NOP();
-  }
+	for(int i=0;i<0xFFFF;++i) {
+		__NOP();
+	}
 
-  if(status != DAVE_STATUS_SUCCESS)
-  {
-    /* Placeholder for error handler code. The while loop below can be replaced with an user error handler. */
-    XMC_DEBUG("DAVE APPs initialization failed\n");
+	if(status != DAVE_STATUS_SUCCESS)
+	{
+		/* Placeholder for error handler code. The while loop below can be replaced with an user error handler. */
+		XMC_DEBUG("DAVE APPs initialization failed\n");
 
-    while(1U)
-    {
-    }
-  }
+		while(1U)
+		{
+		}
+	}
 
-  XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
-  XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
+	XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
+	XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
-  WATCHDOG_Start();
-  /* Placeholder for user application code. The while loop below can be replaced with user application code. */
-  while(1U)
-  {
-	edison_rx_polling();
-	application_worker();
+	application_layer_init();
+	state_machine_init();
 
-	// could be moved to corresponding state
-	ball_intake_worker();
+	WATCHDOG_Start();
+	/* Placeholder for user application code. The while loop below can be replaced with user application code. */
+	while(1U)
+	{
+		edison_rx_polling();
+		application_worker();
 
-	cur_machine_state = state_machine(cur_machine_state);
+		// could be moved to corresponding state
+		ball_intake_worker();
 
-	WATCHDOG_Service();
-//  	current_machine_state = state_machine(current_machine_state);
-  }
+		cur_machine_state = state_machine(cur_machine_state);
+
+		WATCHDOG_Service();
+		//  	current_machine_state = state_machine(current_machine_state);
+	}
 }
 
-void daisy_busy_received(uint8_t sender_id) {
-	// memorize the working status somewhere, master only!
-//	machine_state_set_busy(sender_id);
-}
-
-void daisy_ready_received(uint8_t sender_id){
-	// handle the message from a slave in a state machine, master only!
-	machine_state_set_ready(sender_id);
-}
-void daisy_start_received(){
-	// start the necessary transitions and signal to master with
-	// daisy_send_ready();
-}
-
-void daisy_undefined_command(daisy_command_t cmd) {
-	// evaluate the undefined command here and act accordingly
-}
 
 void test_command(uint8_t command) {
 	switch(command) {
-	case 0x11:
-//		master_control_start_shot_sequence();
-		machine_state_external_trigger();
+	case 0x10:
+		//		master_control_get_ball_sequence();
+		trigger_init_procedure();
 		break;
-	case 0x12:
-//		master_control_get_ball_sequence();
+	case 0x11:
+		//		master_control_start_shot_sequence();
+		trigger_shot_procedure();
+		break;
+	case 0x13:
+		sled_move_waiting();
+		break;
+	case 0x14:
+		sled_move_shot_ready();
 		break;
 	}
 }
 
-void master_control_waiting() {
-	// sled is done initializing, rotate magazine and trigger ball intake
-	machine_state_set_ready(ID_MASTER);
-}
-
-void master_control_shot_ready() {
-	// ready to shoot
-	machine_state_set_ready(ID_MASTER);
-}
-
-void master_control_shot_done() {
-	// right time to trigger magazine
-	machine_state_set_ready(ID_MASTER);
-}

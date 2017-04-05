@@ -121,7 +121,7 @@ void machine_state_external_trigger(void) {
  *	if no transition function is set for the current state, it
  *	will immediately transition to the next state
  */
-machine_state_t state_machine(machine_state_t machine_current_state) {
+machine_state_t old_state_machine(machine_state_t machine_current_state) {
 	static bool entered = false;
 	if(entered == false) {
 		entered = true;

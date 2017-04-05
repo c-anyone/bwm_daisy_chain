@@ -36,6 +36,9 @@ void sled_move_pos0(void){
 		sled_limit_switch();
 	} else {
 		// moves the sled from end to start
+
+		//		PIN_INTERRUPT_Disable(&SLED_POSITION_INTERRUPT);
+
 		DIGITAL_IO_SetOutputHigh(&SLED_POS0);
 		DIGITAL_IO_SetOutputHigh(&SLED_POS1);
 
@@ -45,7 +48,6 @@ void sled_move_pos0(void){
 
 void sled_move_shot_ready(void){
 	// moves from pickup position to shot ready
-	// setup control pins
 	DIGITAL_IO_SetOutputLow(&SLED_POS0);
 	DIGITAL_IO_SetOutputLow(&SLED_POS1);
 
@@ -55,6 +57,7 @@ void sled_move_shot_ready(void){
 }
 
 void sled_move_waiting(void) {
+	// moves from pickup position into waiting position to safely rotate the magazine
 	DIGITAL_IO_SetOutputLow(&SLED_POS1);
 	DIGITAL_IO_SetOutputHigh(&SLED_POS0);
 
@@ -63,6 +66,7 @@ void sled_move_waiting(void) {
 }
 
 void sled_move_shoot(void){
+	// moves the sled with high speed to the flywheels
 	DIGITAL_IO_SetOutputLow(&SLED_POS0);
 	DIGITAL_IO_SetOutputHigh(&SLED_POS1);
 
@@ -111,8 +115,10 @@ static void sled_reactivate_servo(void) {
 
 void sled_position_reachedIRQ(void){
 	// notify the state machine / controller that the position is reached
-	PIN_INTERRUPT_Disable(&SLED_POSITION_INTERRUPT);
-	sled_position_reached();
+	//	PIN_INTERRUPT_Disable(&SLED_POSITION_INTERRUPT);
+//	if(PIN_INTERRUPT_GetPinValue(&SLED_LIMIT_SWITCH_INTERRUPT) != 0) {
+		sled_position_reached();
+//	}
 }
 
 

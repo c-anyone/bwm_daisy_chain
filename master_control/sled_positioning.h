@@ -2,7 +2,7 @@
  * sled_positioning.h
  *
  *  Created on: Mar 27, 2017
- *      Author: faebsn
+ *      Author: Fabio Pungg
  */
 
 #ifndef SLED_POSITIONING_H_

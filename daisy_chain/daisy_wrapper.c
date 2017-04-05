@@ -30,7 +30,7 @@ void min_application_handler(uint8_t id, uint8_t buf[], uint8_t length, uint8_t 
 	else if(id == MY_ID){
 		daisy_payload_received(buf,length);
 		// FIXME: memcpy data to a safe buffer, or do this in upper layer
-	} else {
+	} else if(MY_ID != ID_MASTER) {
 		min_send_frame(&context,id,buf,length);
 	}
 }

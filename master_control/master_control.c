@@ -2,15 +2,17 @@
  * master_control.c
  *
  *  Created on: Mar 27, 2017
- *      Author: faebsn
+ *      Author: Fabio Pungg
  */
 
+#ifdef OLD_MASTER_CONTROL
 #include <DAVE.h>
 #include "master_control.h"
 #include "ball_intake.h"
 #include "sled_positioning.h"
 
 static master_states_t cur_master_state = MASTER_INIT_ONE;
+static uint32_t interrupt_count = 0;
 
 master_states_t get_master_state(void) {
 	return cur_master_state;
@@ -118,7 +120,8 @@ void sled_limit_switch(void) {
  * triggered by servo controller
  */
 void sled_position_reached(void) {
-	if(PIN_INTERRUPT_GetPinValue(&SLED_POSITION_INTERRUPT) == 0) {
-		master_state_machine();
-	}
+	master_state_machine();
+	interrupt_count++;
+	// FIXME: remove interrupt count, only for debugging!
 }
+#endif

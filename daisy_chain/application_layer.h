@@ -17,7 +17,6 @@
 #define ID_SLAVE_3		(0x03u)
 #define MACHINE_COUNT	(0x04u)
 
-
 #define CMD_UNDEFINED		(0x00u)
 #define CMD_START	   		(0x01u)
 #define CMD_READY			(0x02u)
@@ -32,6 +31,7 @@ typedef void(*daisy_set_callback)(uint8_t param, uint32_t payload);
 typedef void(*daisy_get_callback)(uint8_t param);
 typedef void(*daisy_start_callback)(uint8_t param);
 typedef void(*daisy_ack_callback)(uint8_t sender_id);
+typedef void(*daisy_request_status_callback)(void);
 
 typedef void(*daisy_busy_callback)(uint8_t sender_id);
 typedef void(*daisy_ready_callback)(uint8_t sender_id);
@@ -55,6 +55,7 @@ void application_worker(void);
 void set_cmd_start_callback(daisy_start_callback);
 void set_cmd_set_callback(daisy_set_callback);
 void set_cmd_get_callback(daisy_get_callback);
+void set_cmd_request_status_callback(daisy_request_status_callback);
 
 // to be used on master device to evaluate
 void set_cmd_ack_callback(daisy_ack_callback);
@@ -71,14 +72,14 @@ void set_cmd_status_callback(daisy_status_callback);
 void signal_start(uint8_t id, uint8_t param);
 void signal_set(uint8_t id, uint8_t param, uint32_t value);
 void signal_get(uint32_t id,uint32_t param);
-//extern void ready_received(uint8_t id);
-//extern void busy_received(uint8_t id);
+void signal_get_status(uint8_t id);
 #elif defined SLAVE_DEVICE
 // send ready always addressed to master, as the master keeps global state
 void signal_ready(void);
 // send busy always addressed to master
 void signal_busy(void);
 void signal_status(void);
+void signal_ack(void);
 #endif
 
 #endif /* DAISY_CHAIN_APPLICATION_LAYER_H_ */

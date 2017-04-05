@@ -21,6 +21,7 @@ static daisy_ack_callback ack_callback = NULL;
 static daisy_busy_callback busy_callback = NULL;
 static daisy_ready_callback ready_callback = NULL;
 static daisy_status_callback status_callback = NULL;
+static daisy_request_status_callback request_status_callback =NULL;
 /*
  * callback function from daisy_wrapper, used when a payload
  * is addressed to this device
@@ -68,6 +69,11 @@ void daisy_payload_received(uint8_t* payload, uint8_t length) {
 		if(status_callback != NULL) {
 			(*status_callback)(cmd_p->sender_id,cmd_p->payload);
 		}
+	case CMD_REQUEST_STATUS:
+		if(request_status_callback != NULL) {
+			(*request_status_callback)();
+		}
+		break;
 	default:
 		break;
 	}
@@ -109,6 +115,10 @@ void set_cmd_status_callback(daisy_status_callback function) {
 	status_callback = function;
 }
 
+void set_cmd_request_status_callback(daisy_request_status_callback function) {
+
+}
+
 #ifdef MASTER_DEVICE
 void signal_start(uint8_t id,uint8_t param) {
 	command.command = CMD_START;
@@ -122,6 +132,12 @@ void signal_set(uint8_t id, uint8_t param, uint32_t value) {
 	command.sender_id = MY_ID;
 	command.param = param;
 	command.payload = value;
+	daisy_send_payload(id,(uint8_t*)&command,sizeof(command));
+}
+
+void signal_get_status(uint8_t id) {
+	command.command = CMD_REQUEST_STATUS;
+	command.sender_id = MY_ID;
 	daisy_send_payload(id,(uint8_t*)&command,sizeof(command));
 }
 #elif defined SLAVE_DEVICE
@@ -141,6 +157,12 @@ void signal_status(void) {
 	command.command = CMD_STATUS;
 	command.sender_id = MY_ID;
 	// TODO: add status data here and send
+}
+
+void signal_ack(void) {
+	command.command = CMD_ACK;
+	command.sender_id = MY_ID;
+	daisy_send_payload(ID_MASTER,(uint8_t*)&command,sizeof(command));
 }
 #endif
 
