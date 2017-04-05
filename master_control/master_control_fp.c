@@ -39,7 +39,7 @@ struct state_functions{
 	TransitionFun onTransition;
 };
 
-static master_states_t current_state = MASTER_INIT_ONE;
+static master_states_t sled_state = MASTER_INIT_ONE;
 static volatile bool position_reached = false;
 static volatile bool ball_sequence_trigger = false;
 static volatile bool ball_intake_moved = false;
@@ -99,7 +99,7 @@ static struct state_functions function_table[NUMBER_OF_STATES] = {
 		{MASTER_SHOT_READY, sled_move_shot_ready,	check_position_reached},
 		{MASTER_SHOT_SEQUENCE, master_control_shot_ready, external_shot_sequence_trigger},
 		{MASTER_SHOOTING, sled_move_shoot,	check_position_reached},
-		{MASTER_SHOT_DONE,master_control_waiting,	NULL},
+		{MASTER_SHOT_DONE,master_control_shot_done,	NULL},
 		{MASTER_WAITING,ball_intake_lower,			check_ball_intake_position},
 };
 
@@ -107,36 +107,36 @@ void sled_state_machine(void) {
 	static bool entered = false;
 	if(!entered) {
 		entered = true;
-		if(function_table[current_state].onEntry != NULL) {
-			function_table[current_state].onEntry();
+		if(function_table[sled_state].onEntry != NULL) {
+			function_table[sled_state].onEntry();
 		}
 	}
-	if(function_table[current_state].onTransition == NULL) {
+	if(function_table[sled_state].onTransition == NULL) {
 		// transition here, return next state
 		entered = false;
-		current_state = function_table[current_state].nextState;
+		sled_state = function_table[sled_state].nextState;
 	} else {
-		if(function_table[current_state].onTransition()) {
+		if(function_table[sled_state].onTransition()) {
 			entered = false;
-			current_state = function_table[current_state].nextState;
+			sled_state = function_table[sled_state].nextState;
 		}
 	}
 }
 
 void master_control_init(void) {
-	current_state = MASTER_INIT_ONE;
+	sled_state = MASTER_INIT_ONE;
 	ball_intake_init();
 	sled_init();
 }
 
 void master_control_get_ball_sequence(void) {
-	if(current_state == MASTER_WAITING) {
+//	if(sled_state == MASTER_WAITING) {
 		ball_sequence_trigger = true;
-	}
+//	}
 }
 
 void master_control_start_shot_sequence(void) {
-	if(current_state == MASTER_SHOT_READY) {
+	if(sled_state == MASTER_SHOT_READY) {
 		shot_sequence_trigger = true;
 	}
 }
@@ -150,17 +150,6 @@ void sled_limit_switch(void){
 }
 
 void sled_position_reached(void) {
-//	switch(current_state) {
-//	case MASTER_INIT_TWO:
-//	case MASTER_INIT_THREE:
-//	case MASTER_TAKE_BALL_SEQUENCE:
-//	case MASTER_BALL_TAKEN:
-//	case MASTER_SHOOTING:
 		position_reached = true;
-//		break;
-//	default:
-//		position_reached = false;
-//		break;
-//	}
 }
 #endif

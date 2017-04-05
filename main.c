@@ -42,7 +42,7 @@ bool motorboard_ready_status[MACHINE_COUNT] = {
 		false,false,false,false
 };
 
-states_t cur_machine_state = I1_POWERED_UP;
+states_t current_state = I1_POWERED_UP;
 
 int main(void)
 {
@@ -80,10 +80,9 @@ int main(void)
 		// could be moved to corresponding state
 		ball_intake_worker();
 
-		cur_machine_state = state_machine(cur_machine_state);
+		current_state = state_machine(current_state);
 
 		WATCHDOG_Service();
-		//  	current_machine_state = state_machine(current_machine_state);
 	}
 }
 

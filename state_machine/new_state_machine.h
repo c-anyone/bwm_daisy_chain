@@ -10,18 +10,19 @@
 
 
 typedef enum {
-	I1_POWERED_UP = 0,
-	I2_COMM_CHECKED,
+	I1_POWERED_UP = 0,		//powered up, check communication
+	I2_COMM_CHECKED,		// comm
 	I3_SLED_INIT,
 	I4_MAGAZINE_INIT,
 	S1_PICKUP_BALL,
 	S2_SHOT_READY,
-//	S2A_CHANGE_ELEVATION,
-//	S2B_CHANGE_SPEED,
 	S3_SHOT_SEQUENCE,
-//	SR_ERROR,
+	S4_SHOT_DONE,
 	MAX_STATE
 } states_t;
+//	S2A_CHANGE_ELEVATION,
+//	S2B_CHANGE_SPEED,
+//	SR_ERROR,
 
 typedef enum {
 	E_NO_EVENT=0,
