@@ -7,27 +7,7 @@
 
 #include <DAVE.h>
 #include "edison_wrapper.h"
-
-/* replaced with a communication test function */
-//void set_shoot(void){
-//	linear_pos_start();
-//	uint32_t wait_during_shoot = 0xFFF;
-//	delay(wait_during_shoot);
-//	// Ballaufnahme implementieren
-//	linear_pos_wait();
-//}
-
-void set_shoot(void) {
-}
-
-
-
-void set_coordinate(uint8_t x_low, uint8_t x_high, uint8_t y_low, uint8_t y_high, uint8_t hang){
-//	uint16_t x_coordinate = (x_low | x_high << 8);
-//	uint16_t y_coordinate = (y_low | y_high << 8);
-//	float x = (float)x_coordinate / 10;
-//	float y = (float)y_coordinate / 10;
-}
+#include "../daisy_chain/global_definitions.h"
 
 uint8_t edison_min_tx_space(void){
 	uint8_t  space = 0xFF;
@@ -48,17 +28,15 @@ void edison_min_tx_byte(uint8_t byte){
 
 void edison_min_frame_received(uint8_t buf[], uint8_t control, uint8_t id){
 	edison_min_tx_frame(id, buf, control);
-	test_command(id);
-	if (id == 0x11){
-//		set_shoot();
-	}
-	else if (id == 0x12){
 
-//		uint8_t x_low = buf[0];
-//		uint8_t x_high = buf[1];
-//		uint8_t y_low = buf[2];
-//		uint8_t y_high = buf[3];
-//		uint8_t hang = buf[4];
-//		set_coordinate(x_low, x_high, y_low, y_high, hang);
+	if(id == EDISON_SHOOT || id == EDISON_ELEVATION|| id == EDISON_SPEED) {
+		// elevation command, buf is a uint16_t, LSB first
+		// same for speed command
+		// and same for shoot, where payload is the timer in ms
+		uint32_t elev = 0;
+		elev |= buf[0] | (buf[1]<<8);
+		test_command(id,elev);
+		return;
 	}
+	test_command(id,0);
 }

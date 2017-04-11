@@ -12,16 +12,15 @@
 #include "daisy_chain/application_layer.h"
 #include "edison/edison_wrapper.h"
 #include "state_machine/new_state_machine.h"
-//#include "state_machine/machine_state.h"
 #include "master_control/sled_positioning.h"
 #include "master_control/master_control.h"
 #include "master_control/ball_intake.h"
-//#include "master_control/sled_positioning.h"
+#include "daisy_chain/global_definitions.h"
 
-// Master  ID = 0x01
-// Slave 1 ID = 0x02
-// Slave 2 ID = 0x03
-// Slave 3 ID = 0x04
+// Master  ID = 0x00
+// Slave 1 ID = 0x01
+// Slave 2 ID = 0x02
+// Slave 3 ID = 0x03
 
 /**
 
@@ -43,6 +42,7 @@ bool motorboard_ready_status[MACHINE_COUNT] = {
 };
 
 states_t current_state = I1_POWERED_UP;
+uint32_t shot_trigger_timer;
 
 int main(void)
 {
@@ -67,6 +67,8 @@ int main(void)
 	XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
 	XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
+	shot_trigger_timer = SYSTIMER_CreateTimer(3000000,SYSTIMER_MODE_ONE_SHOT,(void*)trigger_shot_procedure,NULL);
+
 	application_layer_init();
 	state_machine_init();
 
@@ -86,22 +88,39 @@ int main(void)
 	}
 }
 
-
-void test_command(uint8_t command) {
+void test_command(uint8_t command, uint32_t payload) {
 	switch(command) {
-	case 0x10:
-		//		master_control_get_ball_sequence();
+	case EDISON_INIT:
+		if(current_state == I2_COMM_CHECKED) {
 		trigger_init_procedure();
+		} else {
+			signal_start(ID_SLAVE_1,0xff);
+			signal_start(ID_SLAVE_2,0xff);
+			current_state = I1_POWERED_UP;
+		}
 		break;
-	case 0x11:
-		//		master_control_start_shot_sequence();
-		trigger_shot_procedure();
+	case EDISON_SHOOT:
+		// payload will be time in ms before
+		if(payload > 0) {
+			SYSTIMER_RestartTimer(shot_trigger_timer,payload*1000);
+		} else {
+			trigger_shot_procedure();
+		}
+		signal_start(ID_SLAVE_2,2);
 		break;
-	case 0x13:
-		sled_move_waiting();
+	case EDISON_ELEVATION:
+		if (current_state != S3_SHOT_SEQUENCE) {
+			signal_set(ID_SLAVE_1,PARAM_ELEVATION,payload);
+		}
 		break;
 	case 0x14:
-		sled_move_shot_ready();
+		break;
+
+	case EDISON_SPEED:
+		if (current_state != S3_SHOT_SEQUENCE) {
+			uint32_t speed = (payload*40) & 0x00000fff;
+			signal_set(ID_SLAVE_2,PARAM_SPEED,speed);
+		}
 		break;
 	}
 }

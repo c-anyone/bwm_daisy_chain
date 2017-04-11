@@ -19,6 +19,7 @@ volatile uint32_t pin_status_lower =1;
 
 void ball_intake_init(void) {
 	ADC_MEASUREMENT_StartConversion(&ADC_MEASUREMENT_0);
+	DIGITAL_IO_SetOutputLow(&TLE_DC_disable);
 }
 
 void ball_intake_raise(void)
@@ -40,20 +41,6 @@ void ball_intake_lower(void)
 void ball_intake_worker(void) {
 		result = ADC_MEASUREMENT_GetResult(&ADC_MEASUREMENT_Channel_A_handle);
 		filter -= (filter-result)*0.05;
-
-		//State machine ballauswurf
-		/*
-		 * 	ballhalter in unterste Stellung bringen
-		 * 	Linearachse in Position 2
-		 * 	revolver positionieren
-		 * 	Linearachse in Position 1
-		 * 	ballhalter in obere position
-		 * 	Drehzahl check walzen (Analog Ausgang)
-		 * 	Ball aus halterung nehmen / Linearache pos2
-		 * 	Ball mit linearachse in walzen fördern
-		 */
-		//	pin_status_neg = DIGITAL_IO_GetInput(&DIGITAL_IO_move_neg);
-		//	pin_status_pos = DIGITAL_IO_GetInput(&DIGITAL_IO_move_pos);
 
 		if ((pin_status_raise ==0 && pin_status_lower ==1))
 		{

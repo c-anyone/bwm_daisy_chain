@@ -20,23 +20,6 @@ typedef enum {
 	S4_SHOT_DONE,
 	MAX_STATE
 } states_t;
-//	S2A_CHANGE_ELEVATION,
-//	S2B_CHANGE_SPEED,
-//	SR_ERROR,
-
-typedef enum {
-	E_NO_EVENT=0,
-	E_ALL_READY,
-	E_WORKING,
-	E_EXTERNAL,
-	MAX_EVENT
-} events_t;
-
-struct state {
-	states_t state;
-	events_t event;
-
-};
 
 void state_machine_init(void);
 void trigger_init_procedure(void);

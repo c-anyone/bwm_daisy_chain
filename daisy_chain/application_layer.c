@@ -7,7 +7,6 @@
 
 
 #include "application_layer.h"
-#include "daisy_wrapper.h"
 
 static daisy_command_t command = {.command = CMD_UNDEFINED,
 		.payload = 0xdeadbeef,
@@ -116,7 +115,7 @@ void set_cmd_status_callback(daisy_status_callback function) {
 }
 
 void set_cmd_request_status_callback(daisy_request_status_callback function) {
-
+	request_status_callback = function;
 }
 
 #ifdef MASTER_DEVICE

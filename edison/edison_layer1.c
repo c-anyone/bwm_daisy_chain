@@ -51,12 +51,12 @@ static void fletcher16_rx_init(void)
 static void fletcher16_rx_step(uint8_t byte)
 {
 	rx_sum2 += rx_sum1 += byte;
+	rx_sum1 = (rx_sum1 & 0x00ffu) + (rx_sum1 >> 8);
+	rx_sum2 = (rx_sum2 & 0x00ffu) + (rx_sum2 >> 8);
 }
 
 static uint16_t fletcher16_rx_finalize(void)
 {
-	rx_sum1 = (rx_sum1 & 0x00ffu) + (rx_sum1 >> 8);
-	rx_sum2 = (rx_sum2 & 0x00ffu) + (rx_sum2 >> 8);
 	return rx_sum2 << 8 | rx_sum1;
 }
 

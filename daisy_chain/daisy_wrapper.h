@@ -11,7 +11,6 @@
 
 
 #include <DAVE.h>
-#include <stdbool.h>
 #include "min.h"
 
 #define DAISY_PORT		(0x00u)

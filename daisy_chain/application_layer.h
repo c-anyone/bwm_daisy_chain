@@ -9,6 +9,7 @@
 #define DAISY_CHAIN_APPLICATION_LAYER_H_
 
 #include <DAVE.h>
+#include "daisy_wrapper.h"
 
 #define ID_PING			(0xBBu)
 #define ID_MASTER		(0x00u)
@@ -63,6 +64,9 @@ void set_cmd_busy_callback(daisy_busy_callback);
 void set_cmd_ready_callback(daisy_ready_callback);
 void set_cmd_status_callback(daisy_status_callback);
 
+void signal_set(uint8_t id, uint8_t param, uint32_t value);
+
+
 /**
  * device role specific model
  */
@@ -70,7 +74,6 @@ void set_cmd_status_callback(daisy_status_callback);
 #ifdef MASTER_DEVICE
 // send start should only be used from master, as it keeps global state
 void signal_start(uint8_t id, uint8_t param);
-void signal_set(uint8_t id, uint8_t param, uint32_t value);
 void signal_get(uint32_t id,uint32_t param);
 void signal_get_status(uint8_t id);
 #elif defined SLAVE_DEVICE

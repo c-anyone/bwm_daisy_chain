@@ -185,6 +185,8 @@ bool i2_check_init_trigger(){
 void i3_init_sled(){
 //	set_busy(ID_MASTER);
 	master_control_init();
+	set_busy(ID_SLAVE_2);
+	signal_start(ID_SLAVE_2,0);
 }
 
 
@@ -207,9 +209,6 @@ void s3_start_shot_sequence(){
 }
 void entry_sr(){}
 
-
-//bool transition_i4(){ return all_ready(); }
-//bool transition_s1(){ return all_ready(); }
 bool s2_check_shot_trigger() {
 	if(shot_trigger) {
 		shot_trigger = false;
@@ -217,11 +216,6 @@ bool s2_check_shot_trigger() {
 	}
 	return false;
 }
-
-//bool transition_s3(){
-//	return all_ready();
-//}
-//bool transition_sr(){ return false; }
 
 void s4_shot_done_prepare_next(void) {
 	master_control_get_ball_sequence();
