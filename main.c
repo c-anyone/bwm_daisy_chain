@@ -92,7 +92,7 @@ void test_command(uint8_t command, uint32_t payload) {
 	switch(command) {
 	case EDISON_INIT:
 		if(current_state == I2_COMM_CHECKED) {
-		trigger_init_procedure();
+			trigger_init_procedure();
 		} else {
 			signal_start(ID_SLAVE_1,0xff);
 			signal_start(ID_SLAVE_2,0xff);
@@ -100,20 +100,22 @@ void test_command(uint8_t command, uint32_t payload) {
 		}
 		break;
 	case EDISON_SHOOT:
-		// payload will be time in ms before
-		if(payload > 0) {
-			SYSTIMER_RestartTimer(shot_trigger_timer,payload*1000);
-		} else {
-			trigger_shot_procedure();
+		// payload will be time in ms
+		if(current_state == S2_SHOT_READY) {
+			if(payload > 0) {
+				SYSTIMER_RestartTimer(shot_trigger_timer,payload*1000);
+			} else {
+				trigger_shot_procedure();
+			}
+			signal_start(ID_SLAVE_2,2);
 		}
-		signal_start(ID_SLAVE_2,2);
 		break;
 	case EDISON_ELEVATION:
 		if (current_state != S3_SHOT_SEQUENCE) {
 			signal_set(ID_SLAVE_1,PARAM_ELEVATION,payload);
 		}
 		break;
-	case 0x14:
+	case EDISON_AZIMUT:
 		break;
 
 	case EDISON_SPEED:

@@ -8,6 +8,7 @@
 
 /**
  *  Bit settings on control pins
+ *  0.11 | 0.2
  *  POS1 | POS0 || distance covered
  *   0   |  0   || intake to shot ready
  *   0   |  1   || waiting position
@@ -19,7 +20,7 @@ static void trigger_sequence(void);
 
 static void sled_reactivate_servo(void);
 static void sled_limit_switch_cb(void) {
-//	PIN_INTERRUPT_Enable(&SLED_POSITION_INTERRUPT);
+	//	PIN_INTERRUPT_Enable(&SLED_POSITION_INTERRUPT);
 	sled_limit_switch();
 }
 
@@ -46,12 +47,17 @@ void sled_move_pos0(void){
 	} else {
 		// moves the sled from end to start
 
-//		PIN_INTERRUPT_Disable(&SLED_POSITION_INTERRUPT);
+		//		PIN_INTERRUPT_Disable(&SLED_POSITION_INTERRUPT);
 
 		DIGITAL_IO_SetOutputHigh(&SLED_POS0);
 		DIGITAL_IO_SetOutputHigh(&SLED_POS1);
 
-		trigger_sequence();
+		if(DIGITAL_IO_GetInput(&SLED_POS0) == 1
+				&& DIGITAL_IO_GetInput(&SLED_POS1)) {
+			trigger_sequence();
+		} else {
+			// handle the error (hardware fault)
+		}
 	}
 }
 
@@ -60,24 +66,36 @@ void sled_move_shot_ready(void){
 	DIGITAL_IO_SetOutputLow(&SLED_POS0);
 	DIGITAL_IO_SetOutputLow(&SLED_POS1);
 
-	trigger_sequence();
-
+	if(DIGITAL_IO_GetInput(&SLED_POS0) == 0
+			&& DIGITAL_IO_GetInput(&SLED_POS1) == 0) {
+		trigger_sequence();
+	} else {
+		// wrong bits sets, handle error (hardware fault)
+	}
 }
 
 void sled_move_waiting(void) {
 	// moves from pickup position into waiting position to safely rotate the magazine
-	DIGITAL_IO_SetOutputLow(&SLED_POS1);
 	DIGITAL_IO_SetOutputHigh(&SLED_POS0);
-
-	trigger_sequence();
+	DIGITAL_IO_SetOutputLow(&SLED_POS1);
+	if(DIGITAL_IO_GetInput(&SLED_POS0) == 1
+			&& DIGITAL_IO_GetInput(&SLED_POS1) == 0) {
+		trigger_sequence();
+	} else {
+		// wrong pins set, handle this error (hardware fault)
+	}
 }
 
 void sled_move_shoot(void){
 	// moves the sled with high speed to the flywheels
 	DIGITAL_IO_SetOutputLow(&SLED_POS0);
 	DIGITAL_IO_SetOutputHigh(&SLED_POS1);
-
-	trigger_sequence();
+	if(DIGITAL_IO_GetInput(&SLED_POS0) == 0
+			&& DIGITAL_IO_GetInput(&SLED_POS1) == 1) {
+		trigger_sequence();
+	} else {
+		// wrong pins set, handle this error (hardware fault)
+	}
 }
 
 typedef enum {

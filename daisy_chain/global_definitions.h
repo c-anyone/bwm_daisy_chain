@@ -10,7 +10,8 @@
 
 #define EDISON_INIT			(0x10u)
 #define EDISON_SHOOT		(0x11u)
-#define EDISON_ELEVATION 	(0x13)
+#define EDISON_ELEVATION 	(0x13u)
+#define EDISON_AZIMUT		(0x14u)
 #define EDISON_SPEED		(0x15u)
 
 #define ID_SLAVE_SPEED		(0x02u)
