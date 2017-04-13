@@ -29,13 +29,15 @@ void edison_min_tx_byte(uint8_t byte){
 void edison_min_frame_received(uint8_t buf[], uint8_t control, uint8_t id){
 	edison_min_tx_frame(id, buf, control);
 
-	if(id == EDISON_SHOOT || id == EDISON_ELEVATION|| id == EDISON_SPEED) {
+	if((id == EDISON_SHOOT || id == EDISON_ELEVATION|| id == EDISON_SPEED) && control == 2) {
 		// elevation command, buf is a uint16_t, LSB first
 		// same for speed command
 		// and same for shoot, where payload is the timer in ms
-		uint32_t elev = 0;
-		elev |= buf[0] | (buf[1]<<8);
-		test_command(id,elev);
+		uint32_t payload = 0;
+
+		payload = buf[0];
+		payload |= (buf[1]<<8);
+		test_command(id,payload);
 		return;
 	}
 	test_command(id,0);

@@ -93,10 +93,14 @@ void test_command(uint8_t command, uint32_t payload) {
 	case EDISON_INIT:
 		if(current_state == I2_COMM_CHECKED) {
 			trigger_init_procedure();
+			signal_set(ID_SLAVE_2,PARAM_SPEED,0);
+
 		} else {
 			signal_start(ID_SLAVE_1,0xff);
-			signal_start(ID_SLAVE_2,0xff);
-			current_state = I1_POWERED_UP;
+			signal_set(ID_SLAVE_2,PARAM_SPEED,0);
+			//			signal_start(ID_SLAVE_2,0xff); // enable of fu slave now only set on speed > 0
+			current_state = I2_COMM_CHECKED;
+			trigger_init_procedure();
 		}
 		break;
 	case EDISON_SHOOT:
@@ -120,8 +124,15 @@ void test_command(uint8_t command, uint32_t payload) {
 
 	case EDISON_SPEED:
 		if (current_state != S3_SHOT_SEQUENCE) {
-			uint32_t speed = (payload*40) & 0x00000fff;
-			signal_set(ID_SLAVE_2,PARAM_SPEED,speed);
+			if(payload == 0) {
+				// send a stop signal
+//				signal_start(ID_SLAVE_2,PARAM_STOP_FLY);
+				signal_set(ID_SLAVE_2,PARAM_SPEED,0);
+				// set speed to 0
+			} else {
+				uint32_t speed = (payload*40) & 0x0000ffff;
+				signal_set(ID_SLAVE_2,PARAM_SPEED,speed);
+			}
 		}
 		break;
 	}

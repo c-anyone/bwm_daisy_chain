@@ -46,6 +46,8 @@ static volatile bool ball_intake_moved = false;
 static volatile bool shot_sequence_trigger = false;
 static volatile bool home_position_reached = false;
 
+static bool entered = false;
+
 static bool check_position_reached(void) {
 	if(position_reached) {
 		position_reached = false;
@@ -104,7 +106,7 @@ static struct state_functions function_table[NUMBER_OF_STATES] = {
 };
 
 void sled_state_machine(void) {
-	static bool entered = false;
+
 	if(!entered) {
 		entered = true;
 		if(function_table[sled_state].onEntry != NULL) {
@@ -125,6 +127,7 @@ void sled_state_machine(void) {
 
 void master_control_init(void) {
 	sled_state = MASTER_INIT_ONE;
+	entered = false;
 	ball_intake_init();
 	sled_init();
 }

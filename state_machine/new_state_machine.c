@@ -137,9 +137,10 @@ void state_machine_init(void) {
 	set_cmd_busy_callback(set_busy);
 	set_cmd_ack_callback(set_ack);
 }
+static bool entered = false;
 
 states_t state_machine(states_t state) {
-	static bool entered = false;
+
 	if(entered == false) {
 		entered = true;
 		if(state_functions_table[state].entryFun != NULL) {
@@ -165,7 +166,7 @@ states_t state_machine(states_t state) {
 
 void entry_i1(){
 	signal_get_status(ID_SLAVE_1);
-	signal_get_status(ID_SLAVE_2);
+//	signal_get_status(ID_SLAVE_2);
 	//	signal_get_status(ID_SLAVE_3); for now this one will not be used
 }
 
@@ -185,8 +186,8 @@ bool i2_check_init_trigger(){
 void i3_init_sled(){
 //	set_busy(ID_MASTER);
 	master_control_init();
-	set_busy(ID_SLAVE_2);
-	signal_start(ID_SLAVE_2,0);
+//	set_busy(ID_SLAVE_2);
+//	signal_start(ID_SLAVE_2,0); // fu only started on speed > 0
 }
 
 
@@ -207,7 +208,6 @@ void s3_start_shot_sequence(){
 	sled_shot_done = false;
 	master_control_start_shot_sequence();
 }
-void entry_sr(){}
 
 bool s2_check_shot_trigger() {
 	if(shot_trigger) {
@@ -248,6 +248,7 @@ void master_control_shot_done() {
 
 void trigger_init_procedure(void) {
 	init_trigger = true;
+	entered = false;
 }
 
 void trigger_shot_procedure(void) {
