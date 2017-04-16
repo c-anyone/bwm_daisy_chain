@@ -166,6 +166,8 @@ states_t state_machine(states_t state) {
 
 void entry_i1(){
 	signal_get_status(ID_SLAVE_1);
+	set_ready(ID_SLAVE_1);
+	set_ready(ID_SLAVE_2);
 //	signal_get_status(ID_SLAVE_2);
 	//	signal_get_status(ID_SLAVE_3); for now this one will not be used
 }

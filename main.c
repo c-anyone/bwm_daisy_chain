@@ -42,7 +42,7 @@ bool motorboard_ready_status[MACHINE_COUNT] = {
 };
 
 states_t current_state = I1_POWERED_UP;
-uint32_t shot_trigger_timer;
+uint32_t shot_trigger_timer = 0;
 
 int main(void)
 {
@@ -67,7 +67,8 @@ int main(void)
 	XMC_USIC_CH_RXFIFO_Flush(DAISY.channel);
 	XMC_USIC_CH_RXFIFO_Flush(EDISON.channel);
 
-	shot_trigger_timer = SYSTIMER_CreateTimer(3000000,SYSTIMER_MODE_ONE_SHOT,(void*)trigger_shot_procedure,NULL);
+	if(shot_trigger_timer == 0)
+		shot_trigger_timer = SYSTIMER_CreateTimer(3000000,SYSTIMER_MODE_ONE_SHOT,(void*)trigger_shot_procedure,NULL);
 
 	application_layer_init();
 	state_machine_init();
@@ -126,7 +127,7 @@ void test_command(uint8_t command, uint32_t payload) {
 		if (current_state != S3_SHOT_SEQUENCE) {
 			if(payload == 0) {
 				// send a stop signal
-//				signal_start(ID_SLAVE_2,PARAM_STOP_FLY);
+				//				signal_start(ID_SLAVE_2,PARAM_STOP_FLY);
 				signal_set(ID_SLAVE_2,PARAM_SPEED,0);
 				// set speed to 0
 			} else {

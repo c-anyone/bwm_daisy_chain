@@ -37,22 +37,27 @@ static uint32_t position_reached_counter = 0;
 static uint32_t pos_interrupt_count = 0;
 static uint32_t home_pos_count = 0;
 
-static uint32_t timer_trigger_5ms;
-static uint32_t timer_servo_50ms;
-static uint32_t timer_home_pos_5ms;
-static uint32_t timer_pos_interrupt;
-static uint32_t timer_limit_interrupt;
+static uint32_t timer_trigger_5ms = 0;
+static uint32_t timer_servo_50ms = 0;
+static uint32_t timer_home_pos_5ms = 0;
+static uint32_t timer_pos_interrupt = 0;
+static uint32_t timer_limit_interrupt = 0;
 
 // sets the servo to on
 void sled_init(void){
 	position_reached_counter = 0;
 	pos_interrupt_count = 0;
 	DIGITAL_IO_SetOutputHigh(&SLED_SON);
-	timer_trigger_5ms = SYSTIMER_CreateTimer(TIMER_5MS,SYSTIMER_MODE_ONE_SHOT,(void*)trigger_sequence,NULL);
-	timer_home_pos_5ms = SYSTIMER_CreateTimer(TIMER_5MS,SYSTIMER_MODE_ONE_SHOT,(void*)sled_limit_switch_cb,NULL);
-	timer_servo_50ms = SYSTIMER_CreateTimer(TIMER_100MS,SYSTIMER_MODE_ONE_SHOT,(void*)sled_reactivate_servo,NULL);
-	timer_pos_interrupt = SYSTIMER_CreateTimer(TIMER_100MS,SYSTIMER_MODE_ONE_SHOT,(void*)pos_reached_reactivate,NULL);
-	timer_limit_interrupt = SYSTIMER_CreateTimer(TIMER_5MS*4,SYSTIMER_MODE_ONE_SHOT,(void*)limit_switch_reactivate,NULL);
+	if(timer_trigger_5ms == 0)
+		timer_trigger_5ms = SYSTIMER_CreateTimer(TIMER_5MS,SYSTIMER_MODE_ONE_SHOT,(void*)trigger_sequence,NULL);
+	if(timer_home_pos_5ms == 0)
+		timer_home_pos_5ms = SYSTIMER_CreateTimer(TIMER_5MS,SYSTIMER_MODE_ONE_SHOT,(void*)sled_limit_switch_cb,NULL);
+	if(timer_servo_50ms == 0)
+		timer_servo_50ms = SYSTIMER_CreateTimer(TIMER_100MS,SYSTIMER_MODE_ONE_SHOT,(void*)sled_reactivate_servo,NULL);
+	if(timer_pos_interrupt == 0)
+		timer_pos_interrupt = SYSTIMER_CreateTimer(TIMER_100MS,SYSTIMER_MODE_ONE_SHOT,(void*)pos_reached_reactivate,NULL);
+	if(timer_limit_interrupt)
+		timer_limit_interrupt = SYSTIMER_CreateTimer(TIMER_5MS*4,SYSTIMER_MODE_ONE_SHOT,(void*)limit_switch_reactivate,NULL);
 }
 
 void sled_move_pos0(void){
@@ -84,8 +89,6 @@ void sled_move_shot_ready(void){
 
 	DIGITAL_IO_SetOutputLow(&SLED_POS0);
 	DIGITAL_IO_SetOutputLow(&SLED_POS1);
-
-
 
 	if(DIGITAL_IO_GetInput(&SLED_POS0) == 0
 			&& DIGITAL_IO_GetInput(&SLED_POS1) == 0) {
@@ -155,24 +158,25 @@ static void trigger_sequence(void) {
 }
 
 void sled_home_positionIRQ(void){
-//	if(PIN_INTERRUPT_GetPinValue(&SLED_LIMIT_SWITCH_INTERRUPT) == 0) {
-		home_pos_count++;
-		DIGITAL_IO_SetOutputLow(&SLED_SON);
-		DIGITAL_IO_SetOutputLow(&SLED_POS0);
-		DIGITAL_IO_SetOutputLow(&SLED_POS1);
-		PIN_INTERRUPT_Disable(&SLED_LIMIT_SWITCH_INTERRUPT);
-		SYSTIMER_StartTimer(timer_servo_50ms);
-//	}
+	//	if(PIN_INTERRUPT_GetPinValue(&SLED_LIMIT_SWITCH_INTERRUPT) == 0) {
+	home_pos_count++;
+	DIGITAL_IO_SetOutputLow(&SLED_SON);
+	DIGITAL_IO_SetOutputLow(&SLED_POS0);
+	DIGITAL_IO_SetOutputLow(&SLED_POS1);
+	PIN_INTERRUPT_Disable(&SLED_LIMIT_SWITCH_INTERRUPT);
+	SYSTIMER_StopTimer(timer_servo_50ms);
+	SYSTIMER_StartTimer(timer_servo_50ms);
+	//	}
 }
 
 static void sled_reactivate_servo(void) {
-	static bool entered=false;
-	if(!entered) {
+	static bool reactivate_entered = false;
+	if(!reactivate_entered) {
 		DIGITAL_IO_SetOutputHigh(&SLED_SON);
 		SYSTIMER_StartTimer(timer_servo_50ms);
-		entered = true;
+		reactivate_entered = true;
 	} else {
-		entered = false;
+		reactivate_entered = false;
 		//		PIN_INTERRUPT_Enable(&SLED_POSITION_INTERRUPT);
 		SYSTIMER_StartTimer(timer_home_pos_5ms);
 	}
