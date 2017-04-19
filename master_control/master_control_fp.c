@@ -128,6 +128,11 @@ void sled_state_machine(void) {
 void master_control_init(void) {
 	sled_state = MASTER_INIT_ONE;
 	entered = false;
+	position_reached = false;
+	ball_sequence_trigger = false;
+	ball_intake_moved = false;
+	shot_sequence_trigger = false;
+	home_position_reached = false;
 	ball_intake_init();
 	sled_init();
 }

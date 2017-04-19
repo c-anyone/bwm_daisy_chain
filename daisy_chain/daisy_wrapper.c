@@ -23,7 +23,7 @@ void daisy_min_init(void) {
 void min_application_handler(uint8_t id, uint8_t buf[], uint8_t length, uint8_t port) {
 	if(id == ID_PING) {
 		daisy_ping_received();
-		if(ID_MASTER == MY_ID) {
+		if(ID_MASTER != MY_ID) {
 			min_send_frame(&context,id,buf,length);
 		}
 	}

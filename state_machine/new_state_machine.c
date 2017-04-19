@@ -130,9 +130,12 @@ void state_machine_init(void) {
 	// TODO: setup callbacks for application layer
 	// TODO: start a communication check
 	// TODO: request a state from every board
-	for(int i=0;i<MACHINE_COUNT;++i) {
-		cur_machine_state[i].id = i;
-	}
+	init_trigger = false;
+	shot_trigger = false;
+	sled_shot_done = false;
+	sled_is_waiting = false;
+	sled_shot_ready = false;
+
 	set_cmd_ready_callback(set_ready);
 	set_cmd_busy_callback(set_busy);
 	set_cmd_ack_callback(set_ack);
@@ -168,8 +171,6 @@ void entry_i1(){
 	signal_get_status(ID_SLAVE_1);
 	set_ready(ID_SLAVE_1);
 	set_ready(ID_SLAVE_2);
-//	signal_get_status(ID_SLAVE_2);
-	//	signal_get_status(ID_SLAVE_3); for now this one will not be used
 }
 
 bool transition_i1(){
@@ -186,20 +187,15 @@ bool i2_check_init_trigger(){
 
 
 void i3_init_sled(){
-//	set_busy(ID_MASTER);
+	set_ready(ID_MASTER);
+	sled_is_waiting = false;
 	master_control_init();
-//	set_busy(ID_SLAVE_2);
-//	signal_start(ID_SLAVE_2,0); // fu only started on speed > 0
 }
 
 
 void i4_rotate_magazine(){
 	set_busy(ID_SLAVE_1);
 	signal_start(ID_SLAVE_1,1);
-	//	set_busy(ID_SLAVE_2);
-	//	signal_start(ID_SLAVE_2,0);
-	//	start_ack_timer(ID_SLAVE_1);
-	//	start_ack_timer(ID_SLAVE_2);
 }
 void s1_get_ball_sequence(){
 	set_busy(ID_MASTER);
@@ -231,7 +227,6 @@ bool s4_to_shot_ready() {
 }
 
 void master_control_waiting() {
-//	set_ready(ID_MASTER);
 	sled_is_waiting = true;
 }
 

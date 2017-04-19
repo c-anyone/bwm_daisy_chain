@@ -9,6 +9,8 @@
 #include "edison_wrapper.h"
 #include "../daisy_chain/global_definitions.h"
 
+uint8_t edison_tx_buf[256];
+
 uint8_t edison_min_tx_space(void){
 	uint8_t  space = 0xFF;
 	return space;
@@ -27,7 +29,8 @@ void edison_min_tx_byte(uint8_t byte){
 }
 
 void edison_min_frame_received(uint8_t buf[], uint8_t control, uint8_t id){
-	edison_min_tx_frame(id, buf, control);
+	memcpy(edison_tx_buf,buf,control);
+	edison_min_tx_frame(id, edison_tx_buf, control);
 
 	if((id == EDISON_SHOOT || id == EDISON_ELEVATION|| id == EDISON_SPEED) && control == 2) {
 		// elevation command, buf is a uint16_t, LSB first

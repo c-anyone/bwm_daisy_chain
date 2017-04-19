@@ -17,6 +17,8 @@
 #include "master_control/ball_intake.h"
 #include "daisy_chain/global_definitions.h"
 
+#define WAV_TIMER	(1600000u)
+
 // Master  ID = 0x00
 // Slave 1 ID = 0x01
 // Slave 2 ID = 0x02
@@ -97,9 +99,7 @@ void test_command(uint8_t command, uint32_t payload) {
 			signal_set(ID_SLAVE_2,PARAM_SPEED,0);
 
 		} else {
-			signal_start(ID_SLAVE_1,0xff);
 			signal_set(ID_SLAVE_2,PARAM_SPEED,0);
-			//			signal_start(ID_SLAVE_2,0xff); // enable of fu slave now only set on speed > 0
 			current_state = I2_COMM_CHECKED;
 			trigger_init_procedure();
 		}
@@ -107,11 +107,7 @@ void test_command(uint8_t command, uint32_t payload) {
 	case EDISON_SHOOT:
 		// payload will be time in ms
 		if(current_state == S2_SHOT_READY) {
-			if(payload > 0) {
-				SYSTIMER_RestartTimer(shot_trigger_timer,payload*1000);
-			} else {
-				trigger_shot_procedure();
-			}
+				SYSTIMER_RestartTimer(shot_trigger_timer,WAV_TIMER+payload*1000);
 			signal_start(ID_SLAVE_2,2);
 		}
 		break;
